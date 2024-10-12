@@ -1,0 +1,27 @@
+services:
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    env_file:
+      - ./client/.env
+    ports:
+      - "8001:8001"
+    networks:
+      - my-network
+
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    env_file:
+      - ./server/.env
+    ports:
+      - "8050:8050"
+    networks:
+      - my-network
+
+networks:
+  my-network:
+    driver: bridge
+
