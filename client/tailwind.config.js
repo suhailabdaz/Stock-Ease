@@ -7,8 +7,8 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        PlusJakartaSans: ['PlusJakartaSans'],
-        PlusJakartaSans1000: ['PlusJakartaSans-1000'],
+        shopify: ['shopifysans'],
+        shopify1000: ['shopifysans-1000'],
       },
       boxShadow: {
         custom: '0 4px 6px rgba(0, 0, 0, 0.1)',

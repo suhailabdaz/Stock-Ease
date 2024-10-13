@@ -1,14 +1,11 @@
-import { Toaster } from "sonner"
+import { Toaster } from 'sonner';
 
-
- 
- const HomePage = () =>{
-   return (
+const LoginPage = () => {
+  return (
     <div className="w-full md:flex justify-between h-screen">
-            <Toaster position="bottom-right" expand={false} richColors />
-      
+      <Toaster position="bottom-right" expand={false} richColors />
     </div>
-   )
- }
- 
- export default HomePage
+  );
+};
+
+export default LoginPage;
