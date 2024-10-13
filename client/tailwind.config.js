@@ -9,11 +9,22 @@ export default {
       fontFamily: {
         shopify: ['shopifysans'],
         shopify1000: ['shopifysans-1000'],
+        dunk500:['dunk-it-500']
       },
       boxShadow: {
         custom: '0 4px 6px rgba(0, 0, 0, 0.1)',
         neon: '0 0 50px rgba(255, 105, 180, 0.6), 0 5px 10px rgba(126, 34, 206, 0.3)',
         custom_shadow: '0px 0px 10px rgba(0, 0, 0, 0.2)'
+      },
+      colors: {
+        endPurple: '#333053', 
+        startPurple :'#D3D1ED',
+        endgreen : '#233635',
+        startGreen: '#D2EAE4',
+        darkestPurple : "#1E1E2C",
+        darkestGreen : '#223231',
+        buttonBootom: "#414141",
+        buttonTop: '#3E3E3E'
       },
     },
   },

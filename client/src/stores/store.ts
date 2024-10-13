@@ -1,9 +1,9 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import aadharApi from '../api/axiosApi';
-import aadharSlice from './aadharSlice';
+import userSlice from './userSlice';
 
 const rootReducer = combineReducers({
-  aadharSlice: aadharSlice.reducer,
+  userSlice: userSlice.reducer,
   [aadharApi.reducerPath]: aadharApi.reducer,
 });
 

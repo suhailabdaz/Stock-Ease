@@ -3,13 +3,19 @@
 @tailwind utilities;
 @font-face {
   font-family: 'shopifysans';
-  src: url('../assets/fonts/Shopify\ Sans\ Web\ Medium\ Regular.ttf') format('truetype');
+  src: url('../assets/fonts/ShopifySansWebMediumRegular.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
 }
 @font-face {
   font-family: 'shopifysans-1000';
-  src: url('../assets/fonts/Shopify\ Sans\ Web\ Medium\ Regular.ttf') format('truetype');
-  font-weight: 1000;
+  src: url('../assets/fonts/ShopifySansWebMediumRegular.ttf') format('truetype');
+  font-weight: 3000;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'dunk-it-500';
+  src: url('../assets/fonts/Druk-BoldItalic-Trial.otf') format('opentype');
+  font-weight: 500;
   font-style: normal;
 }

@@ -1,12 +1,15 @@
-import { Route, Routes } from "react-router-dom"
-import LoginPage from "./pages/HomePage"
+import { Route, Routes } from 'react-router-dom';
+import LoginPage from './pages/LoginPage';
+import PublicRouter from '../utils/PublicRouter';
 
 const Routing = () => {
   return (
     <Routes>
-        <Route path="/" element={<LoginPage/>}/>
+      <Route element={<PublicRouter/>}>
+        <Route path="/" element={<LoginPage />} />
+      </Route>
     </Routes>
-  )
-}
+  );
+};
 
-export default Routing
+export default Routing;
