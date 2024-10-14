@@ -27,6 +27,7 @@ const SignupModal: React.FC<Props> = ({ onSwitchToLogin }) => {
   ) => {
     try {
       const response = await userCreate(values).unwrap()
+      console.log(response);
       
     } catch {
 
