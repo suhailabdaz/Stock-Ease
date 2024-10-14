@@ -23,6 +23,8 @@ export const CustomTextField: React.FC<CustomTextFieldProps> = ({
       variant="outlined"
       margin="dense"
       aria-required 
+      size="small" 
+      
     />
   );
 };
