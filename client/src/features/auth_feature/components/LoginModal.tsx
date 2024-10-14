@@ -30,9 +30,9 @@ const LoginModal: React.FC<Props> = ({onSwitchToSignup}) => {
               initial={{ x: '-10%', opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               exit={{ x: '10%', opacity: 0 }}
-              transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+              transition={{ type: 'spring', stiffness: 100, damping: 20 }}
             >
-    <div className="h-auto  transition-all delay-300 duration-300 w-auto md:shadow-lg md:border-2 bg-white py-10 px-8 md:rounded-xl">
+    <div className="h-auto  transition-all delay-300 duration-300 w-auto md:shadow-custom  bg-white py-10 px-8 md:rounded-xl">
       <Logo />
       <div className="mt-4 mb-4">
         <h2 className="font-shopify font-bold text-2xl mb-1">Log in</h2>

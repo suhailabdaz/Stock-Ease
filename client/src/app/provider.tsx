@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react';
 import { Provider } from 'react-redux';
-import store from './../stores/store';
+import {store,persistor} from './../stores/store';
+import { PersistGate } from "redux-persist/integration/react";
 
 interface ProviderProps {
   children: ReactNode;
@@ -10,8 +11,10 @@ const Providers: React.FC<ProviderProps> = ({ children }) => {
   return (
     <>
       <Provider store={store}>
-          {children}
-      </Provider>
+      <PersistGate loading={null} persistor={persistor}>
+        {children}
+      </PersistGate>
+    </Provider>
     </>
   );
 };
