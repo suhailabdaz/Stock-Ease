@@ -1,5 +1,6 @@
 import { UserInterface } from '../interfaces/iModels/iModel';
 import mongoose, { Schema } from 'mongoose';
+import bcrypt from "bcryptjs";
 
 // Define the User schema
 const UserSchema: Schema<UserInterface> = new Schema(
@@ -22,6 +23,10 @@ const UserSchema: Schema<UserInterface> = new Schema(
     timestamps: true,
   }
 );
+
+UserSchema.methods.comparePassword = async function (enteredPassword: string) {
+    return await bcrypt.compare(enteredPassword, this.password);
+  };
 
 // Create the User model with the UserInterface
 const UserModel = mongoose.model<UserInterface>('users', UserSchema);

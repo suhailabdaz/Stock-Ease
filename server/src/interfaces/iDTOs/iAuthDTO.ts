@@ -1,4 +1,4 @@
-import {User} from "../interface" 
+import {User, userWithId} from "../interface" 
 
 export interface registerRequest{
   name :string,
@@ -11,3 +11,24 @@ export interface registerResponse{
   message:string,
   userData?:User | null
 }
+
+export interface verifyRequest{
+  email:string;
+  otp:string
+}
+
+export interface loginResponse{
+  status: number,
+  message:string,
+  data:
+  {user:userWithId;
+  accessToken: string;
+  refreshToken:string;
+}
+}
+
+export interface loginRequest{
+  email : string;
+  password:string;
+}
+
