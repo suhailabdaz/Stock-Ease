@@ -24,7 +24,15 @@ export default {
         darkestPurple : "#1E1E2C",
         darkestGreen : '#223231',
         buttonBootom: "#414141",
-        buttonTop: '#3E3E3E'
+        buttonTop: '#3E3E3E',
+        headerBlack:'#1A1A1A',
+        sidebarWhite:"#EBEBEB",
+        fafawhite:"#FAFAFA",
+        AABlack:'#1A1A1A',
+        grayButtonColour:"#303030",
+        greyText:"#171717",
+        gradWhite:"#EAE9ED",
+        contentWhite:"#F1F1F1"
       },
     },
   },
