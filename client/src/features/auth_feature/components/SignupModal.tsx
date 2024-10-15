@@ -1,11 +1,12 @@
 import React from 'react';
 import Logo from '../../../components/Logo';
 import { Field, Form, Formik, FormikHelpers } from 'formik';
-import { loginValidationSchema } from '../utils/validation/loginSchema';
+import { SignupValidationSchema } from '../utils/validation/loginSchema';
 import { SignupFormValues } from '../types/Interfaces';
 import { CustomTextField } from './CustomTextField';
 import { motion } from 'framer-motion';
 import { useRegisterMutation } from '../api/auth-api';
+import { ButtonLoading } from '../../../components/ButtonLoading';
 
 const initialValues: SignupFormValues = {
   name: '',
@@ -14,7 +15,7 @@ const initialValues: SignupFormValues = {
 };
 
 type Props = {
-  onSwitchToLogin: () => void;
+  onSwitchToLogin: (modal:string) => void;
 };
 
 const SignupModal: React.FC<Props> = ({ onSwitchToLogin }) => {
@@ -28,7 +29,7 @@ const SignupModal: React.FC<Props> = ({ onSwitchToLogin }) => {
     try {
       const response = await userCreate(values).unwrap()
       console.log(response);
-      
+      onSwitchToLogin('otp')
     } catch {
 
     } finally {
@@ -56,7 +57,7 @@ const SignupModal: React.FC<Props> = ({ onSwitchToLogin }) => {
         </div>
         <Formik
           initialValues={initialValues}
-          validationSchema={loginValidationSchema}
+          validationSchema={SignupValidationSchema}
           onSubmit={onSubmit}
         >
           {({ isSubmitting }) => (
@@ -86,14 +87,14 @@ const SignupModal: React.FC<Props> = ({ onSwitchToLogin }) => {
                   className="w-full h-10  text-md text-white rounded-lg transition-all delay-200 duration-300 font-shopify1000 bg-gradient-to-b from-buttonTop to-buttonBootom "
                   disabled={isSubmitting}
                 >
-                  {isSubmitting ? '...' : 'Create account '}
+                  {isSubmitting ? <ButtonLoading/> : 'Create account '}
                 </button>
               </div>
               <div className="flex font-shopify text-sm justify-start mt-10 mb-5">
                 <span className="text-gray-600">
                   Alread a member ?{' '}
-                  <button onClick={onSwitchToLogin}>
-                    <span className="text-blue-500">Login</span>
+                  <button onClick={() => onSwitchToLogin('login')}>
+                  <span className="text-blue-500">Login</span>
                   </button>
                 </span>
               </div>

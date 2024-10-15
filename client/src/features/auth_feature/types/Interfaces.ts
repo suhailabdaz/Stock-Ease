@@ -8,6 +8,11 @@ export interface LoginFormValues {
   password: string;
 }
 
+export interface otpformValues{
+  email:string
+  otp:string
+}
+
 export interface SignupFormValues {
   name:string,
   email: string;
