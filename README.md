@@ -1,6 +1,6 @@
 # Stock-Ease
 
-A real-time Inventory Management System designed to manage inventory, track sales, and generate reports. The system is built using **Vite-React** for the frontend, utilizing **RTK Query** for efficient data fetching and state management. The backend, developed with **Node.js** and **Express** in a microservice architecture, and **MongoDB** for storing inventory and customer data.
+A real-time Inventory Management System designed to manage inventory, track sales, and generate reports. The system is built using **Vite-React** for the frontend, utilizing **RTK Query** for efficient data fetching and state management. The backend, developed with **Node.js** and **Express** in a microservice architecture, and **MongoDB** for storing inventory and customer data. **Redis**.
 
 ## Features
 
