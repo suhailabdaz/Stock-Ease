@@ -104,22 +104,22 @@ export default class AuthService implements iAuthService {
         if(existingUser){
             const isPasswordMatch=await comparePassword(data.password,existingUser.password)
             if(isPasswordMatch){
-                const accessToken = await jwtController.createToken(existingUser._id.toString(),'15m', process.env.JWT_SECRET_KEY||"suhail",);
+                const token = await jwtController.createToken(existingUser._id.toString(),'15m', process.env.JWT_SECRET_KEY||"suhail",);
                 const refreshToken = await jwtController.createToken(existingUser._id.toString(), '7d',process.env.JWT_REFRESH_SECRET_KEY||"suhailRefresh");
                 return {
                     status: StatusCode.OK as number,
                     message: "Login successful",
                     data: {
                         user: existingUser,
-                        accessToken,
+                        token,
                         refreshToken
                     }
-                };
+                }  as loginResponse;
                 }else{
-                return { status: StatusCode.BadRequest as number, message: "Password does not match" }
+                return { status: StatusCode.BadRequest as number, message: "Password does not match" } as StatusMessage
             }
         }else{
-            return { status: StatusCode.NotFound as number, message: "User Not Found" }
+            return { status: StatusCode.NotFound as number, message: "User Not Found" } as StatusMessage
         }
     } catch (error) {
         console.error("Error during registration:", error);

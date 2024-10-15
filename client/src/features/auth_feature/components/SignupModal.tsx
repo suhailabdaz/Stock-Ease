@@ -7,6 +7,9 @@ import { CustomTextField } from './CustomTextField';
 import { motion } from 'framer-motion';
 import { useRegisterMutation } from '../api/auth-api';
 import { ButtonLoading } from '../../../components/ButtonLoading';
+import { toast } from 'sonner';
+import { useDispatch } from 'react-redux';
+import { setEmail } from '../../../stores/userSlice';
 
 const initialValues: SignupFormValues = {
   name: '',
@@ -21,6 +24,7 @@ type Props = {
 const SignupModal: React.FC<Props> = ({ onSwitchToLogin }) => {
 
   const [userCreate] = useRegisterMutation();
+  const dispatch= useDispatch()
 
   const onSubmit = async(
     values: SignupFormValues,
@@ -28,10 +32,15 @@ const SignupModal: React.FC<Props> = ({ onSwitchToLogin }) => {
   ) => {
     try {
       const response = await userCreate(values).unwrap()
-      console.log(response);
-      onSwitchToLogin('otp')
+      if(response.status == 200){
+        onSwitchToLogin('otp')
+        toast.success(response.message)
+        dispatch(setEmail(values.email))
+      }else{
+        toast.error(response.message)
+      }
     } catch {
-
+      toast.error('an error occured, please try again !!')
     } finally {
       actions.setSubmitting(false);
     }
@@ -45,7 +54,7 @@ const SignupModal: React.FC<Props> = ({ onSwitchToLogin }) => {
       exit={{ x: '-10%', opacity: 0 }}
       transition={{ type: 'spring', stiffness: 100, damping: 20 }}
     >
-      <div className="h-auto   w-auto md:shadow-custom bg-white py-10 px-8 md:rounded-xl">
+      <div className="h-auto  w-auto md:shadow-custom bg-white py-10 px-8 md:rounded-xl">
         <Logo />
         <div className="mt-4 mb-4">
           <h2 className="font-shopify font-bold text-2xl mb-1">

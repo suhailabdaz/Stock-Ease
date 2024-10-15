@@ -3,6 +3,7 @@ import LoginModal from '../../features/auth_feature/components/LoginModal';
 import SignupModal from '../../features/auth_feature/components/SignupModal';
 import OtpModal from '../../features/auth_feature/components/OtpModal';
 import { AnimatePresence } from 'framer-motion';
+import { Toaster } from 'sonner';
 
 const LoginPage: React.FC = () => {
   const [isLogin, setIsLogin] = useState('login');
@@ -13,6 +14,7 @@ const LoginPage: React.FC = () => {
 
   return (
     <div className="w-screen h-screen flex">
+                  <Toaster position="top-center" expand={false} richColors />
       <div className="w-1/2 h-full bg-white md:bg-gradient-to-b from-white via-startPurple to-white"></div>
       <div className="w-1/2 h-full bg-white md:bg-gradient-to-b from-white via-startGreen to-white"></div>
       <div className="absolute inset-0 flex items-center justify-center">

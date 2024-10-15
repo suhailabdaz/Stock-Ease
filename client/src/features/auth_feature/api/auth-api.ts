@@ -1,74 +1,59 @@
-import { apiSlice } from "../../../api/api-slice";
-import { logout } from "../../../stores/userSlice";
-import { RegistrationData,RegistrationResponse } from "../types/Interfaces";
-
-
-const invalidateTagAfterDelay = (tag: any, delay: number) => {
-  setTimeout(() => {
-    authApi.util.invalidateTags([tag]);
-  }, delay);
-};
+import { apiSlice } from '../../../api/api-slice';
+import { logout } from '../../../stores/userSlice';
+import { LoginFormValues, loginResponse, RegistrationData, RegistrationResponse, verifyOtpReq } from '../types/Interfaces';
 
 export const authApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     register: builder.mutation<RegistrationResponse, RegistrationData>({
       query: (data) => ({
-        url: "/auth/register",
-        method: "POST",
+        url: '/auth/register',
+        method: 'POST',
         body: data,
-        credentials: "include" as const,
+        credentials: 'include' as const,
       }),
-      async onQueryStarted(_, { queryFulfilled }) {
-        try {
-          await queryFulfilled;
-          invalidateTagAfterDelay('create', 10000);
-        } catch(e) {
-            console.log(e);
-            
-        }
-      },
     }),
 
-    login: builder.mutation({
+    login: builder.mutation<loginResponse,LoginFormValues>({
       query: ({ email, password }) => ({
-        url: "/auth/login",
-        method: "POST",
+        url: 'auth/login',
+        method: 'POST',
         body: {
           email,
           password,
         },
-        credentials: "include" as const,
+        credentials: 'include' as const,
       }),
-      async onQueryStarted(_, { queryFulfilled }) {
-        try {
-          await queryFulfilled;
-          invalidateTagAfterDelay('login', 10000);
-        } catch(e) {
-            console.log(e);
-            
-        }
-      },
+    }),
+
+    verfyOtp: builder.mutation<RegistrationResponse, verifyOtpReq>({
+      query: ({ email, otp }) => ({
+        url: 'auth/verifyotp',
+        method: 'POST',
+        body: {
+          email,
+          otp,
+        },
+        credentials: 'include' as const,
+      }),
     }),
 
     logOut: builder.mutation({
       query: () => ({
-        url: "auth-service/auth/logout",
-        method: "POST",
-        credentials: "include" as const,
+        url: 'auth/logout',
+        method: 'POST',
+        credentials: 'include' as const,
       }),
-      async onQueryStarted(_arg, { dispatch,queryFulfilled }) {
+      async onQueryStarted(_arg, { dispatch }) {
         try {
           dispatch(logout());
-          await queryFulfilled;
-          invalidateTagAfterDelay('logout', 10000);
         } catch (error: any) {
           dispatch(logout());
-          console.error("Error during logout:", error);
+          console.error('Error during logout:', error);
         }
       },
     }),
   }),
 });
 
-export const { useRegisterMutation, useLoginMutation, useLogOutMutation } = authApi;
-
+export const { useRegisterMutation, useLoginMutation, useLogOutMutation,useVerfyOtpMutation } =
+  authApi;

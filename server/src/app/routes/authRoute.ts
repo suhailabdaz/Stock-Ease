@@ -8,10 +8,13 @@ const jwtController=new JwtControllers()
 
 const authRouter = express.Router();
 
-authRouter.post('/register',controller.userRegister);
-authRouter.post('/verifyotp',controller.verifyOtp);
-authRouter.post('/login',controller.login);
-authRouter.get('/refresh', jwtController.refreshToken as unknown as express.RequestHandler);
-authRouter.post('/logout', jwtController.isAuthenticated as express.RequestHandler, jwtController.logout as unknown as express.RequestHandler);
+const asyncHandler = (fn: Function) => (req: express.Request, res: express.Response, next: express.NextFunction) =>
+  Promise.resolve(fn(req, res, next)).catch(next);
+
+authRouter.post('/register',asyncHandler(controller.userRegister));
+authRouter.post('/verifyotp',asyncHandler(controller.verifyOtp));
+authRouter.post('/login',asyncHandler(controller.login));
+authRouter.post('/refresh', asyncHandler(jwtController.refreshToken));
+authRouter.post('/logout',asyncHandler(jwtController.isAuthenticated), asyncHandler(jwtController.isAuthenticated),asyncHandler( jwtController.logout));
 
 export default authRouter;

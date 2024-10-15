@@ -1,5 +1,11 @@
 export type User = {
-  user_email : string | null,
-  user_token : string | null,
+  userData:UserData | null
   user_IsAuthenticated : boolean
+  email:string | null
+}
+
+export interface UserData  {
+  _id:string,
+  name:string,
+  email:string,
 }

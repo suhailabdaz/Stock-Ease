@@ -12,7 +12,7 @@ export const sendOtp=async(email:string,name:string)=>{
         });
         console.log("this is otp ",otp);
         const subject = "Otp Verification";
-        const text = `Hello ${name},\n\nThank you for registering with real Time application!, your OTP is ${otp}\n\nHave a nice day!!!`;
+        const text = `Hello ${name},\n\nThank you for registering with Stock-Ease!, your OTP is ${otp}\n\nHave a nice day!!!`;
         sendMail(email, subject, text).catch((error) => {
             console.error("Error sending email:", error);
         });

@@ -20,9 +20,8 @@ export interface verifyRequest{
 export interface loginResponse{
   status: number,
   message:string,
-  data:
-  {user:userWithId;
-  accessToken: string;
+  data:{user:userWithId;
+  token: string;
   refreshToken:string;
 }
 }
