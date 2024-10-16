@@ -1,7 +1,7 @@
 import { ArrowRightStartOnRectangleIcon, ClipboardDocumentCheckIcon, UserGroupIcon, HomeIcon, WalletIcon,ChartBarSquareIcon } from '@heroicons/react/24/outline';
-import  { useState } from 'react'
+import  { useEffect, useState } from 'react'
 import { useLogOutMutation } from '../features/auth_feature/api/auth-api';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 
 const SideBar = () => {
@@ -9,6 +9,15 @@ const SideBar = () => {
   const [currentOption, setCurrentOption] = useState<string>('home');
   const [loginMutation] = useLogOutMutation()
   const navigate = useNavigate()
+  const location = useLocation(); // Hook to get the current URL
+
+  useEffect(() => {
+    // Extract the base route (e.g., 'products' from '/products/*')
+    const path = location.pathname.split('/')[1];
+    
+    // Set the current option based on the path
+    setCurrentOption(path || 'home'); // Default to 'home' if path is empty
+  }, [location.pathname]);
   const handleLogout = async ()=>{
     try{
       loginMutation({}).unwrap()

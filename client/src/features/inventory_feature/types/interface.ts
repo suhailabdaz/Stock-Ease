@@ -2,7 +2,7 @@ import { FieldProps } from 'formik';
 
 
 export interface AddProductFormValues {
-  name: string;
+  title: string;
   description: string;
   image: File; // File type for image input
   stock: number;

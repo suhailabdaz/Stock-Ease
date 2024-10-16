@@ -1,7 +1,7 @@
 import * as Yup from 'yup';
 
 export const AddProductSchema = Yup.object({
-  name: Yup.string()
+  title: Yup.string()
     .required('Product name is required')
     .min(3, 'Product name must be at least 3 characters'),
   description: Yup.string()
@@ -21,7 +21,7 @@ export const AddProductSchema = Yup.object({
     .integer('Stock must be an integer'),
   price: Yup.number()
     .required('Price is required')
-    .min(0, 'Price cannot be negative')
+    .min(99, 'Price cannot less than 99')
     .test(
       'is-decimal',
       'Price must have up to 2 decimal places',

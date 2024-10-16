@@ -5,7 +5,6 @@ import PublicRouter from '../utils/PublicRouter';
 import PrivateRouter from '../utils/PrivateRouter';
 import SharedLayout from './pages/SharedLayout';
 import ProductsPage from './pages/ProductsPage';
-import AddProduct from '../features/inventory_feature/components/AddProduct';
 
 const Routing = () => {
   return (
@@ -16,8 +15,7 @@ const Routing = () => {
       <Route element={<PrivateRouter/>}>
       <Route element={<SharedLayout/>}>
         <Route path="/home" element={<HomePage />} />
-        <Route path="/products" element={<ProductsPage />} />
-        <Route path="/products/add-product" element={<AddProduct />} />
+        <Route path="/products/*" element={<ProductsPage />} />
         </Route>
       </Route>
     </Routes>
