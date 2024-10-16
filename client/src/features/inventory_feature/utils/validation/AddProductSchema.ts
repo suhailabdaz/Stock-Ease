@@ -7,14 +7,14 @@ export const AddProductSchema = Yup.object({
   description: Yup.string()
     .required('Description is required')
     .min(10, 'Description must be at least 10 characters'),
-  image: Yup.mixed()
-    .required('Image is required')
-    .test('fileType', 'Only JPG or PNG images are allowed', (value) => {
-      return value && value instanceof File && (value.type === 'image/jpeg' || value.type === 'image/png');
-    })
-    .test('fileSize', 'File size cannot exceed 10MB', (value) => {
-      return value && value instanceof File && value.size <= 10 * 1024 * 1024; // 10MB in bytes
-    }),
+  category: Yup.string()
+    .required('Category is required')
+    .min(4, 'Category must be at least 4 characters'),
+  status: Yup.string()
+    .required('Status is required'),
+    publishing: Yup.array()
+    .min(1, 'At least one Publishing Channel is required')
+    .required('Publishing status is required'),
   stock: Yup.number()
     .required('Stock is required')
     .min(0, 'Stock cannot be negative')
