@@ -9,6 +9,7 @@ import logger from 'morgan'
 import { limiter } from './utils/rateLimitter'
 import { config } from "./config/config";
 import authRouter from "./app/routes/authRoute";
+import inventRouter from "./app/routes/inventRoute";
 
 class App{
     public app:Application;
@@ -33,6 +34,7 @@ class App{
         this.app.use(logger("dev")); 
         this.app.use(cookieParser());
         this.app.use('/auth',authRouter)
+        this.app.use('/inventory',inventRouter)
         this.app.use(limiter)
     }
 

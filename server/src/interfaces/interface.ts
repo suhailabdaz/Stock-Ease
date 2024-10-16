@@ -1,4 +1,3 @@
-import mongoose,{ Types } from 'mongoose';
 
 
 export  interface User {
@@ -14,7 +13,7 @@ export interface DecodedToken {
 }
 
 export interface userWithId{
-  _id:Types.ObjectId;
+  _id:string;
   name :string,
   email:string,
   password:string
@@ -35,4 +34,25 @@ export interface ItokenOptions {
   secure?: boolean;
   domain?: string;
   path?:string
+}
+
+export  interface Productwithid {
+  _id:string;
+  title: string;
+  description: string;
+  category:string;
+  publishing:[string];
+  stock: number;
+  price: number;
+  status:string 
+}
+
+export  interface Product {
+  title: string;
+  description: string;
+  category:string;
+  publishing:[string]
+  stock: number;
+  price: number;
+  status:string 
 }

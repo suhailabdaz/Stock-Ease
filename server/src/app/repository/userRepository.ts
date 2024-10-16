@@ -1,4 +1,3 @@
-import mongoose from 'mongoose';
 import UserModel from '../../models/userModel';
 import { User, userWithId } from '../../interfaces/interface';
 import IUserRepository from '../../interfaces/iRepositories/iUserRepository';

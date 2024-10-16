@@ -12,6 +12,8 @@ import {
 } from './CustomTextField';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import { useNavigate } from 'react-router-dom';
+import { useAddProductMutation } from '../api/inventory-api';
+import { toast } from 'sonner';
 
 const initialValues: AddProductFormValues = {
   title: '',
@@ -25,15 +27,18 @@ const initialValues: AddProductFormValues = {
 
 const AddProduct: React.FC = () => {
   const navigate = useNavigate()
+
+  const [useAddProduct] = useAddProductMutation()
   const onSubmit = async (
     values: AddProductFormValues,
     actions: FormikHelpers<AddProductFormValues>
   ) => {
     try {
-      console.log(values);
-      // Handle form submission
+      const response = await useAddProduct(values).unwrap()
+      toast.success(response.message)
+      navigate('/products')
     } catch (error) {
-      console.error(error);
+      toast.success('Something went wrong')
     } finally {
       actions.setSubmitting(false);
     }
