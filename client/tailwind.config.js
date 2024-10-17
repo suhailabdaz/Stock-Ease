@@ -32,7 +32,8 @@ export default {
         grayButtonColour:"#303030",
         greyText:"#171717",
         gradWhite:"#EAE9ED",
-        contentWhite:"#F1F1F1"
+        contentWhite:"#F1F1F1",
+        secondaryButton:'#E3E3E3'
       },
     },
   },

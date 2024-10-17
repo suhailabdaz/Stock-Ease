@@ -61,10 +61,8 @@ export default class JwtControllers {
           .json({ message: 'Invalid token' });
       }
 
-      // Attach userId to request object for future use
       req.userId = decoded.id;
 
-      // Proceed to next middleware or controller
       return next();
     } catch (e) {
       console.error(e);

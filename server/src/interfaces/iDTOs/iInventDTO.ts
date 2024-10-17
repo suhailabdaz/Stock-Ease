@@ -1,29 +1,27 @@
 import {Product, Productwithid,StatusMessage} from "../interface" 
 
 export type AddProductReq = Product
+
 export type AddProductResponse = StatusMessage
 
 export type GetProductReq = string
 
-export interface GetProductRes{
-  statusmessage : StatusMessage
+export interface GetProductRes extends StatusMessage{
   product:Productwithid
 }
 
 export type AllProductsReq = null
 
-export interface AllProductsRes {
-  statusMessage:StatusMessage
-  products:[Productwithid]
+export interface AllProductsRes extends StatusMessage {
+  products:Productwithid[]
 }
 
 export interface EditProductReq{
   _id:string,
-  product:Productwithid
+  product:Product
 }
 
-export interface EditProductRes{
-  statusmessage:StatusMessage
+export interface EditProductRes extends StatusMessage{
   product:Productwithid
 }
 
@@ -34,8 +32,6 @@ export interface BlockProductRes{
   product:Productwithid
 }
 
-export interface ErrorRes {
-  statusmessage:StatusMessage
-}
+export type ErrorRes = StatusMessage
 
 

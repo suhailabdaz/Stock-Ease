@@ -30,3 +30,13 @@ export interface EditProductRequest{
 export interface Product extends AddProductFormValues{
   _id:string
 }
+
+export interface SingleProductResponse extends AddProductResponse{
+  product:Product
+}
+
+
+export interface AllProductsResponse extends AddProductResponse {
+  products : Product[]
+}
+

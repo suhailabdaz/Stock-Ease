@@ -20,29 +20,22 @@ export default class ProductRepository implements IProductRepository {
     }
   }
 
-  async editProduct(product: Productwithid): Promise<Productwithid | null> {
-    const updatedProduct = await ProductModel.findByIdAndUpdate(
-      product._id,
-      product,
-      { new: true }
-    );
-    return updatedProduct ? (updatedProduct as Productwithid) : null;
-  }
-
-  async blockProduct(id: string): Promise<Productwithid | null> {
-    const product = await ProductModel.findById(id);
-    if (!product) {
-      return null;
-    }
-    const newStatus = product.status === 'blocked' ? 'active' : 'blocked';
+  async editProduct(id: string, product: Product): Promise<Productwithid | null> {
+    console.log('Updating product with id:', id);
+    console.log('Update data:', product);
+    
     const updatedProduct = await ProductModel.findByIdAndUpdate(
       id,
-      { status: newStatus },
-      { new: true } 
+      product,
+      { new: true, runValidators: true }
     );
+    
+    console.log('Updated product:', updatedProduct);
+    
     return updatedProduct ? (updatedProduct as Productwithid) : null;
-  }
+}
 
+  
   async findProduct(id: string): Promise<Productwithid | null> {
     const product = await ProductModel.findById(id);
     return product ? (product as Productwithid) : (null as null);

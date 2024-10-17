@@ -26,4 +26,39 @@ export default class InventController {
           status:StatusCode.InternalServerError,
           message: 'Internal Server Error' });
     }
-  };}
+  };
+getAllProducts = async (req:Request,res:Response)=>{
+  try{
+      const AllProductsResponse = await this.service.getAllProducts(null) 
+      res.status(AllProductsResponse.status).json(AllProductsResponse);
+  }catch{
+    res
+    .status(StatusCode.InternalServerError)
+    .json({ 
+      status:StatusCode.InternalServerError,
+      message: 'Internal Server Error' });  }
+}
+ getProduct= async (req:Request,res:Response)=>{
+  try{const id = req.params.id as string
+      const getProductResponse = await this.service.getProduct(id) 
+      res.status(getProductResponse.status).json(getProductResponse);
+  }catch{
+    res
+    .status(StatusCode.InternalServerError)
+    .json({ 
+      status:StatusCode.InternalServerError,
+      message: 'Internal Server Error' });  }
+}
+editProduct= async (req:Request,res:Response)=>{
+  try{const _id = req.params.id as string
+    
+      const getProductResponse = await this.service.editProduct({_id,product:req.body.product}) 
+      res.status(getProductResponse.status).json(getProductResponse);
+  }catch{
+    res
+    .status(StatusCode.InternalServerError)
+    .json({ 
+      status:StatusCode.InternalServerError,
+      message: 'Internal Server Error' });  }
+}
+}

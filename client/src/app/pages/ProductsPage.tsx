@@ -1,4 +1,5 @@
 import AddProduct from '../../features/inventory_feature/components/AddProduct';
+import EditProduct from '../../features/inventory_feature/components/EditProduct';
 import ProductList from '../../features/inventory_feature/components/ProductList';
 import { Route, Routes } from 'react-router-dom';
 
@@ -9,6 +10,7 @@ const ProductsPage = () => {
         <Routes>
           <Route index element={<ProductList />} />
           <Route path="add-product" element={<AddProduct />} />
+          <Route path="edit-product/:id" element={<EditProduct />} />
         </Routes>{' '}
       </div>
     </div>

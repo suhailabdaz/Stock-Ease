@@ -12,8 +12,9 @@ const asyncHandler = (fn: Function) => (req: Request, res: Response, next: NextF
   Promise.resolve(fn(req, res, next)).catch(next);
 
 inventRouter.post('/products',asyncHandler(jwtController.isAuthenticated),asyncHandler(controller.addProduct));
-// inventRouter.get('/products',asyncHandler(jwtController.isAuthenticated),asyncHandler(controller.getProducts));
-// inventRouter.put('/products/:id',asyncHandler(jwtController.isAuthenticated),asyncHandler(controller.editProduct));
-// inventRouter.patch('/products/:id',asyncHandler(jwtController.isAuthenticated), asyncHandler(jwtController.blockProduct));
+inventRouter.get('/products',asyncHandler(jwtController.isAuthenticated),asyncHandler(controller.getAllProducts));
+inventRouter.get('/single-product/:id',asyncHandler(jwtController.isAuthenticated),asyncHandler(controller.getProduct));
+inventRouter.put('/products/:id',asyncHandler(jwtController.isAuthenticated),asyncHandler(controller.editProduct));
+
 
 export default inventRouter;

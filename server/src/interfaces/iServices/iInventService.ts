@@ -7,5 +7,4 @@ export default interface iInventService {
   getAllProducts(data:AllProductsReq):Promise<AllProductsRes | ErrorRes>
   editProduct(data:EditProductReq):Promise<EditProductRes | ErrorRes>
   getProduct(data:GetProductReq):Promise<GetProductRes | ErrorRes>
-  blockProduct(data:BlockProductReq):Promise<BlockProductRes | ErrorRes>
 }
