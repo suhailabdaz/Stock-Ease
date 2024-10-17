@@ -1,4 +1,4 @@
-import { ArrowRightStartOnRectangleIcon, ClipboardDocumentCheckIcon, UserGroupIcon, HomeIcon, WalletIcon,ChartBarSquareIcon } from '@heroicons/react/24/outline';
+import { ArrowRightStartOnRectangleIcon, ClipboardDocumentCheckIcon, UserGroupIcon, HomeIcon, WalletIcon } from '@heroicons/react/24/outline';
 import  { useEffect, useState } from 'react'
 import { useLogOutMutation } from '../features/auth_feature/api/auth-api';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -9,14 +9,12 @@ const SideBar = () => {
   const [currentOption, setCurrentOption] = useState<string>('home');
   const [loginMutation] = useLogOutMutation()
   const navigate = useNavigate()
-  const location = useLocation(); // Hook to get the current URL
+  const location = useLocation(); 
 
   useEffect(() => {
-    // Extract the base route (e.g., 'products' from '/products/*')
     const path = location.pathname.split('/')[1];
     
-    // Set the current option based on the path
-    setCurrentOption(path || 'home'); // Default to 'home' if path is empty
+    setCurrentOption(path || 'home'); 
   }, [location.pathname]);
   const handleLogout = async ()=>{
     try{
@@ -102,24 +100,7 @@ const SideBar = () => {
                 </button>
               </li>
             </div>
-            <div
-              className={`flex rounded-xl p-2 pr-[6rem]  ${
-                currentOption === 'analytics'
-                  ? 'bg-fafawhite    '
-                  : ' bg-transparent '
-              }`}
-              onClick={()=>{setCurrentOption('analytics')
-                navigate('/analytics')
-              }}
-
-            >
-              <li className="flex hover:cursor-pointer">
-                <ChartBarSquareIcon className="h-6 mr-4" />
-                <button>
-                  Analytics
-                </button>
-              </li>
-            </div>
+            
             <div
               className={`flex rounded-xl p-2 pr-[6rem] py-8 font-extrabold ${
                 currentOption === 'login'

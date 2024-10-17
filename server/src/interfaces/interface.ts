@@ -73,3 +73,21 @@ export  interface Customer {
   mobile: string;
   status:string 
 }
+
+export interface ReqOrder{
+  productid: string;
+  customerid: string;
+  paymentmethod:string;
+  price: number;
+  status:string;
+}
+
+export interface ResOrder{
+  _id:string;
+  orderid:string;
+  productid: string;
+  customerid: string;
+  paymentmethod:string;
+  price: number;
+  status:string;
+}

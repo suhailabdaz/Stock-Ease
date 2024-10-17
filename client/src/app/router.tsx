@@ -6,6 +6,7 @@ import PrivateRouter from '../utils/PrivateRouter';
 import SharedLayout from './pages/SharedLayout';
 import ProductsPage from './pages/ProductsPage';
 import CustomersPage from './pages/CustomersPage';
+import SalesPage from './pages/SalesPage';
 
 const Routing = () => {
   return (
@@ -18,6 +19,7 @@ const Routing = () => {
         <Route path="/home" element={<HomePage />} />
         <Route path="/products/*" element={<ProductsPage />} />
         <Route path="/customers/*" element={<CustomersPage />} />
+        <Route path="/orders/*" element={<SalesPage />} />
         </Route>
       </Route>
     </Routes>

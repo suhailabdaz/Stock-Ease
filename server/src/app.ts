@@ -11,6 +11,7 @@ import { config } from "./config/config";
 import authRouter from "./app/routes/authRoute";
 import inventRouter from "./app/routes/inventRoute";
 import custRouter from './app/routes/custRoute'
+import orderRouter from "./app/routes/orderRoute";
 
 class App{
     public app:Application;
@@ -37,6 +38,7 @@ class App{
         this.app.use('/auth',authRouter)
         this.app.use('/inventory',inventRouter)
         this.app.use('/customer',custRouter)
+        this.app.use('/order',orderRouter)
         this.app.use(limiter)
     }
 

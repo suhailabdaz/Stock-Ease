@@ -23,3 +23,13 @@ export interface CustomerInterface extends Document {
   mobile:string;
   status:string
 }
+
+
+export interface OrderInterface extends Document {
+  orderid:string;
+  productid: string;
+  customerid: string;
+  paymentmethod:string;
+  price: number;
+  status:string;
+}

@@ -42,11 +42,6 @@ export default {
             except: ['./inventory_feature'],
           },
           {
-            target: './src/features/report_feature',
-            from: './src/features',
-            except: ['./report_feature'],
-          },
-          {
             target: './src/features/sales_feature',
             from: './src/features',
             except: ['./sales_features'],
