@@ -10,6 +10,7 @@ import { limiter } from './utils/rateLimitter'
 import { config } from "./config/config";
 import authRouter from "./app/routes/authRoute";
 import inventRouter from "./app/routes/inventRoute";
+import custRouter from './app/routes/custRoute'
 
 class App{
     public app:Application;
@@ -35,6 +36,7 @@ class App{
         this.app.use(cookieParser());
         this.app.use('/auth',authRouter)
         this.app.use('/inventory',inventRouter)
+        this.app.use('/customer',custRouter)
         this.app.use(limiter)
     }
 

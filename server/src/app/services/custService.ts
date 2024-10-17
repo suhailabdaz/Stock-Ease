@@ -1,34 +1,34 @@
 import { StatusCode } from '../../enums/statusCodes';
 import {
-  AddProductReq,
-  AddProductResponse,
+  AddCustomerReq,
+  AddCustomerResponse,
   ErrorRes,
-  AllProductsReq,
-  AllProductsRes,
-  EditProductReq,
-  EditProductRes,
-  GetProductRes,
-} from '../../interfaces/iDTOs/iInventDTO';
-import IProductRepository from '../../interfaces/iRepositories/iProductRepository';
-import iInventService from '../../interfaces/iServices/iInventService';
-import ProductRepository from '../repository/productRepository';
+  AllCustomersReq,
+  AllCustomersRes,
+  EditCustomerReq,
+  EditCustomerRes,
+  GetCustomerRes,
+} from '../../interfaces/iDTOs/iCustDTO';
+import ICustomerRepository from '../../interfaces/iRepositories/iCustomerRepository';
+import iCustService from '../../interfaces/iServices/iCustService';
+import CustomerRepository from '../repository/customerRepository';
 
-const repository = new ProductRepository();
+const repository = new CustomerRepository();
 
-export default class InventService implements iInventService {
-  private repository: IProductRepository;
+export default class CustService implements iCustService {
+  private repository: ICustomerRepository;
   constructor() {
     this.repository = repository;
   }
-  async addProduct(
-    data: AddProductReq
-  ): Promise<AddProductResponse | ErrorRes> {
+  async addCustomer(
+    data: AddCustomerReq
+  ): Promise<AddCustomerResponse | ErrorRes> {
     try {
-      const AddProduct = await this.repository.saveProduct(data);
-      if (AddProduct) {
+      const AddCustomer = await this.repository.saveCustomer(data);
+      if (AddCustomer) {
         return {
           status: StatusCode.Created as number,
-          message: 'Product Added Succesfully',
+          message: 'Customer Added Succesfully',
         };
       } else {
         return {
@@ -43,16 +43,16 @@ export default class InventService implements iInventService {
       };
     }
   }
-  async getAllProducts(
-    data: AllProductsReq
-  ): Promise<AllProductsRes | ErrorRes> {
+  async getAllCustomers(
+    data: AllCustomersReq
+  ): Promise<AllCustomersRes | ErrorRes> {
     try {
-      const AllProduct = await this.repository.getAllProducts();
-      if (AllProduct) {
+      const AllCustomer = await this.repository.getAllCustomers();
+      if (AllCustomer) {
         return {
           status: StatusCode.OK as number,
-          message: 'Got all products',
-          products: AllProduct,
+          message: 'Got all customers',
+          customers: AllCustomer,
         };
       } else {
         return {
@@ -68,16 +68,14 @@ export default class InventService implements iInventService {
     }
   }
 
-  async editProduct(data: EditProductReq): Promise<EditProductRes | ErrorRes> {
-    try {
-      console.log(data.product,"inservice");
-      
-      const Product = await this.repository.editProduct(data._id,data.product);
-      if (Product) {
+  async editCustomer(data: EditCustomerReq): Promise<EditCustomerRes | ErrorRes> {
+    try {      
+      const Customer = await this.repository.editCustomer(data._id,data.customer);
+      if (Customer) {
         return {
           status: StatusCode.OK as number,
-          message: 'Got  product',
-          product: Product,
+          message: 'Got  customer',
+          customer: Customer,
         };
       } else {
         return {
@@ -92,21 +90,21 @@ export default class InventService implements iInventService {
       };
     }
     }
-  async getProduct(
+  async getCustomer(
     data: string
-  ): Promise<GetProductRes | ErrorRes> {
+  ): Promise<GetCustomerRes | ErrorRes> {
     try {
-      const Product = await this.repository.findProduct(data);
-      if (Product) {
+      const Customer = await this.repository.findCustomer(data);
+      if (Customer) {
         return {
           status: StatusCode.OK as number,
-          message: 'Got  product',
-          product: Product,
+          message: 'Got  customer',
+          customer: Customer,
         };
       } else {
         return {
           status: StatusCode.Conflict as number,
-          message: 'Error Fetching Products',
+          message: 'Error Fetching customer',
         };
       }
     } catch {

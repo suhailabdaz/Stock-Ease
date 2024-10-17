@@ -56,3 +56,20 @@ export  interface Product {
   price: number;
   status:string 
 }
+
+export  interface Customerwithid {
+  _id:string;
+  name: string;
+  address: string;
+  pincode:string;
+  mobile: string;
+  status:string 
+}
+
+export  interface Customer {
+  name: string;
+  address: string;
+  pincode:string;
+  mobile: string;
+  status:string 
+}

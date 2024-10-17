@@ -15,3 +15,11 @@ export interface ProductInterface extends Document {
   price: number;
   status:string
 }
+
+export interface CustomerInterface extends Document {
+  name: string;
+  address: string;
+  pincode:string;
+  mobile:string;
+  status:string
+}

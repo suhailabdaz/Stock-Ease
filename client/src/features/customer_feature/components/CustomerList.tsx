@@ -1,21 +1,21 @@
 import React, { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useGetProductsQuery } from '../api/inventory-api';
+import { useGetCustomersQuery } from '../api/customer-api';
 import { motion } from 'framer-motion';
 import { TextField, InputAdornment } from '@mui/material';
 import { MagnifyingGlassIcon,EyeIcon } from '@heroicons/react/24/outline';
 import debounce from 'lodash/debounce';
-import NoRPoducts from './NoRPoducts';
+import NoCustomers from './NoCustomers';
 
-const ProductList = () => {
+const CustomerList = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
 
   const {
-    data: productsData,
+    data: customersData,
     isLoading,
     isError,
-  } = useGetProductsQuery(undefined, {
+  } = useGetCustomersQuery(undefined, {
     refetchOnMountOrArgChange: true,
   });
 
@@ -34,39 +34,39 @@ const ProductList = () => {
     return <div>
       <div className="w-[100%] mb-6 flex justify-between">
         <h1 className="font-shopify1000 font-bold text-greyText text-2xl">
-          Products
+          Customers
         </h1>
         <button
-          onClick={() => navigate('/products/add-product')}
+          onClick={() => navigate('/customers/add-customer')}
           className="font-shopify1000 text-fafawhite bg-gradient-to-b from-buttonTop to-buttonBootom py-2 px-3 rounded-xl hover:scale-105 transition-all ease-in-out duration-300"
         >
-          Add Product
+          Add Customer
         </button>
       </div>
-      <NoRPoducts/>
+      <NoCustomers/>
     </div> 
   }
 
-  const filteredProducts = productsData?.products.filter(
-    (product) =>
-      product.title.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredCustomers = customersData?.customers.filter(
+    (customer) =>
+      customer.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
     <div>
       <div className="w-[100%] mb-6 flex justify-between">
         <h1 className="font-shopify1000 font-bold text-greyText text-2xl">
-          Products
+          Customers
         </h1>
         <button
-          onClick={() => navigate('/products/add-product')}
+          onClick={() => navigate('/customers/add-customer')}
           className="font-shopify1000 text-fafawhite bg-gradient-to-b from-buttonTop to-buttonBootom py-2 px-3 rounded-xl hover:scale-105 transition-all ease-in-out duration-300"
         >
-          Add Product
+          Add Customer
         </button>
       </div>
       <motion.div
-        key="add-product"
+        key="add-customer"
         initial={{ x: '1%', opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
         exit={{ x: '-1%', opacity: 0 }}
@@ -78,7 +78,7 @@ const ProductList = () => {
               fullWidth
               size="small" 
               variant="outlined"
-              placeholder="Search products..."
+              placeholder="Search Customers..."
               onChange={handleSearchChange}
               InputProps={{
                 startAdornment: (
@@ -93,37 +93,35 @@ const ProductList = () => {
             <table className="min-w-full rounded-b-xl border-t border-gray-400">
               <thead className='bg-gray-100 font-shopify1000 text-left text-buttonBootom text-sm'>
                 <tr>
-                  <th className="pt-2 pb-2 px-6">Title</th>
+                  <th className="pt-2 pb-2 px-6">Name</th>
                   <th className="pt-2 pb-2 px-6">Status</th>
-                  <th className="pt-2 pb-2 px-6">Channels</th>
-                  <th className="pt-2 pb-2 px-6">Stock</th>
-                  <th className="pt-2 pb-2 px-6">Category</th>
+                  <th className="pt-2 pb-2 px-6">Mobile</th>
+                  <th className="pt-2 pb-2 px-6">Address</th>
+                  <th className="pt-2 pb-2 px-6">Pin Code</th>
                   <th className="pt-2 pb-2 px-6">Edit</th>
                 </tr>
               </thead>
               <tbody>
-                {filteredProducts?.map((product) => (
-                  <tr key={product._id} className="border-t border-gray-400">
-                    <td className="pt-3 pb-3 px-6 text-greyText font-semibold">{product.title}</td>
+                {filteredCustomers?.map((customer) => (
+                  <tr key={customer._id} className="border-t border-gray-400">
+                    <td className="pt-3 pb-3 px-6 text-greyText font-semibold">{customer.name}</td>
                     <td className='pt-3 pb-3 px-6 '>
                       <div className={`inline-block rounded-xl px-2 py-1 text-center w-20 ${
-                        product.status === 'active' ? 'bg-green-200 text-green-800' : 'bg-red-200 text-red-800'
+                        customer.status === 'active' ? 'bg-green-200 text-green-800' : 'bg-red-200 text-red-800'
                       }`}>
-                        {product.status === 'active' ? 'Active' : 'Blocked'}
+                        {customer.status === 'active' ? 'Active' : 'Blocked'}
                       </div>
                     </td>
                     <td className="pt-3 pb-3 px-6 text-greyText ">
-                      {product.publishing.length}
+                      {customer.mobile}
                     </td>
-                    <td className="pt-3 pb-3 px-6 text-greyText ">
-                      <span className={product.stock === 0 ? 'text-orange-800' : 'text-black'}>
-                        {product.stock} in Stock
-                      </span>
-                    </td>
-                    <td className="pt-3 pb-3 px-6 text-greyText ">{product.category}</td>
+              
+                    <td className="pt-3 pb-3 px-6 text-greyText ">{customer.address}</td>
+                    <td className="pt-3 pb-3 px-6 text-greyText ">{customer.pincode}</td>
+
                     <td className="pt-3 pb-3 px-6">
                       <button
-                        onClick={() => navigate(`/products/edit-product/${product._id}`)}
+                        onClick={() => navigate(`/customers/edit-customer/${customer._id}`)}
                         className="flex items-center justify-center px-3 py-1 bg-secondaryButton hover:bg-gray-200 rounded-xl font-shopify text-greyText"
                       >
                         <EyeIcon className="h-3 mr-1" />
@@ -141,4 +139,4 @@ const ProductList = () => {
   );
 };
 
-export default ProductList;
+export default CustomerList;
