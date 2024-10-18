@@ -41,7 +41,7 @@ export const salesApi = apiSlice.injectEndpoints({
       query: ({ _id, status }) => ({
         url: `/order/orders/${_id}`,
         method: 'PATCH',
-        body: status,
+        body: {status},
         credentials: 'include' as const,
       }),
       invalidatesTags: (_result, _error, { _id }) => [{ type: 'Sales', _id }],
@@ -56,10 +56,10 @@ export const salesApi = apiSlice.injectEndpoints({
       providesTags: (result) =>
         result
           ? [
-              ...result.customers?.map(({ _id }) => ({ type: 'Sales' as const, _id })),
-              { type: 'Sales', id: 'LIST' },
+              ...result.customers?.map(({ _id }) => ({ type: 'Customers' as const, _id })),
+              { type: 'Customers', id: 'LIST' },
             ]
-          : [{ type: 'Sales', id: 'LIST' }],
+          : [{ type: 'Customers', id: 'LIST' }],
     }),
     getProducts: builder.query<AllProductsResponse , void>({
       query: () => ({
@@ -70,10 +70,10 @@ export const salesApi = apiSlice.injectEndpoints({
       providesTags: (result) =>
         result
           ? [
-              ...result.products?.map(({ _id }) => ({ type: 'Sales' as const, _id })),
-              { type: 'Sales', id: 'LIST' },
+              ...result.products?.map(({ _id }) => ({ type: 'Products' as const, _id })),
+              { type: 'Products', id: 'LIST' },
             ]
-          : [{ type: 'Sales', id: 'LIST' }],
+          : [{ type: 'Products', id: 'LIST' }],
     }),
   }),
 });

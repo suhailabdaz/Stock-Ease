@@ -30,8 +30,7 @@ const initialValues: CreateOrderFormValues = {
 const CreateOrder: React.FC = () => {
   const navigate = useNavigate();
 
-  const [useCreateOrder] = useCreateOrderMutation();
-
+  const [createOrder, { isLoading: isCreatingOrder }] = useCreateOrderMutation();
   const { data: productsData,isLoading:isProductsLoading } = useGetProductsQuery(undefined, {
     refetchOnMountOrArgChange: true,
   });
@@ -40,6 +39,9 @@ const CreateOrder: React.FC = () => {
     refetchOnMountOrArgChange: true,
   });
 
+  const productRatata = productsData?.products.filter((product: any) => product.stock > 0);
+
+
   const onSubmit = async (
     values: CreateOrderFormValues,
     actions: FormikHelpers<CreateOrderFormValues>
@@ -47,11 +49,11 @@ const CreateOrder: React.FC = () => {
     try {
       console.log("thr order bvalues",values);
       
-      const response = await useCreateOrder(values).unwrap();
+      const response = await createOrder(values).unwrap();
       toast.success(response.message);
       navigate('/orders');
     } catch (error) {
-      toast.success('Something went wrong');
+      toast.error('Something went wrong');
     } finally {
       actions.setSubmitting(false);
     }
@@ -92,7 +94,7 @@ const CreateOrder: React.FC = () => {
                 </button>
                 <button
                   type="submit"
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || isCreatingOrder}
                   className="font-shopify1000 text-AABlack bg-gradient-to-b from-fafawhite to-fafawhite border border-AABlack py-2 px-4 rounded-xl hover:scale-105 transition-all ease-in-out duration-300"
                 >
                   {isSubmitting ? <ButtonLoading /> : 'Create'}
@@ -117,7 +119,7 @@ const CreateOrder: React.FC = () => {
                     name="productid"
                     component={CustomObjectSelectField}
                     label="Product"
-                    options={productsData?productsData.products:[]}
+                    options={productsData?productRatata:[]}
                     displayKey="title"
                     placeholder="Select a Product"
                     isLoading={isProductsLoading}
@@ -136,9 +138,9 @@ const CreateOrder: React.FC = () => {
                   <h1 className="font-shopify1000 text-xl mb-2">Payment</h1>
                   <div className="flex justify-between items-center space-x-4">
                     <Field
-                      name="payment"
+                      name="paymentmethod"
                       component={CustomSelectField}
-                      label="payment"
+                      label="Payment Method"
                       placeholder="Payment Method"
                     />
                     <Field

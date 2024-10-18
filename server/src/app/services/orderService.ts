@@ -48,7 +48,8 @@ export default class OrderService implements IOrderService {
   }
 
   async editOrder(data: EditOrderReq): Promise<EditOrderREsponse | null> {
-    try {      
+    try {   
+      
       const Order = await this.repository.editOrder(data._id,data.status);
       if (Order) {
         return Order

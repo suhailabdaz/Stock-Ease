@@ -2,6 +2,7 @@ import { ReqOrder, ResOrder } from '../../interfaces/interface';
 import IOrderRepository from '../../interfaces/iRepositories/iOrderRepository';
 import  OrderModel from '../../models/orderModel';
 import ProductModel from '../../models/productModel'
+import generateOrderId from '../../utils/orderIdGenerate';
 
 export default class OrderRepository implements IOrderRepository {
 
@@ -12,7 +13,9 @@ export default class OrderRepository implements IOrderRepository {
 
   async saveOrder(order: ReqOrder): Promise<ResOrder | null> {
     try {
-      const savedOrder = await OrderModel.create(order);
+      const orderid = await generateOrderId();
+      const theOrder  = {...order,orderid}
+      const savedOrder = await OrderModel.create(theOrder);
       
       if (savedOrder) {
         const updatedProduct = await ProductModel.findByIdAndUpdate(
@@ -39,12 +42,11 @@ export default class OrderRepository implements IOrderRepository {
     
     const updatedOrder = await OrderModel.findByIdAndUpdate(
       id,
-      {
-        status
-      },
+      { status },
       { new: true, runValidators: true }
     );
-        
+    
+    console.log(updatedOrder); // Log the updated order
     return updatedOrder ? (updatedOrder as ResOrder) : null;
 }
 

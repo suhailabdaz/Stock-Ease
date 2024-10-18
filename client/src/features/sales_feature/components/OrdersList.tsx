@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useGetOrdersQuery } from '../api/sales-api';
+import { useGetCustomersQuery, useGetOrdersQuery, useGetProductsQuery } from '../api/sales-api';
 import { motion } from 'framer-motion';
 import { TextField, InputAdornment } from '@mui/material';
 import { MagnifyingGlassIcon, EyeIcon } from '@heroicons/react/24/outline';
@@ -19,6 +19,14 @@ const OrderList = () => {
     refetchOnMountOrArgChange: true,
   });
 
+  const { data: productsData,isLoading:isProductsLoading } = useGetProductsQuery(undefined, {
+    refetchOnMountOrArgChange: true,
+  });
+
+  const { data: customersData,isLoading: isCustomersLoading  } = useGetCustomersQuery(undefined, {
+    refetchOnMountOrArgChange: true,
+  });
+
   const debouncedSearch = useCallback(
     debounce((term: React.SetStateAction<string>) => {
       setSearchTerm(term);
@@ -30,7 +38,9 @@ const OrderList = () => {
     debouncedSearch(event.target.value);
   };
 
-  if (isLoading || isError) {
+
+
+  if (isLoading || isError || isProductsLoading || isCustomersLoading) {
     return (
       <div>
         <div className="w-[100%] mb-6 flex justify-between">
@@ -53,6 +63,16 @@ const OrderList = () => {
     order.orderid.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const getCustomerName = (customerId: string) => {
+    const customer = customersData?.customers.find(c => c._id === customerId);
+    return customer ? `${customer.name}` : 'Unknown';
+  };
+
+  const getProductTitle = (productId: string) => {
+    const product = productsData?.products.find(p => p._id === productId);
+    return product ? product.title : 'Unknown';
+  };
+
   return (
     <div>
       <div className="w-[100%] mb-6 flex justify-between">
@@ -60,7 +80,7 @@ const OrderList = () => {
           Orders
         </h1>
         <button
-          onClick={() => navigate('/orders/add-order')}
+          onClick={() => navigate('/orders/create-order')}
           className="font-shopify1000 text-fafawhite bg-gradient-to-b from-buttonTop to-buttonBootom py-2 px-3 rounded-xl hover:scale-105 transition-all ease-in-out duration-300"
         >
           Create order
@@ -95,6 +115,7 @@ const OrderList = () => {
               <thead className="bg-gray-100 font-shopify1000 text-left text-buttonBootom text-sm">
                 <tr>
                   <th className="pt-2 pb-2 px-6">Order ID</th>
+                  <th className="pt-2 pb-2 px-6">Status</th>
                   <th className="pt-2 pb-2 px-6">Customer</th>
                   <th className="pt-2 pb-2 px-6">Product</th>
                   <th className="pt-2 pb-2 px-6">Payment</th>
@@ -110,32 +131,34 @@ const OrderList = () => {
                     </td>
                     <td className="pt-3 pb-3 px-6 ">
                       <div
-                        className={`inline-block rounded-xl px-2 py-1 text-center w-20 ${
-                          order.status === 'delivered'
+                        className={`inline-block rounded-xl px-2 py-1 text-center w-23 ${
+                          order.status === 'completed'
                             ? 'bg-green-200 text-green-800'
                             : order.status === 'pending'
                             ? 'bg-orange-200 text-orange-800'
                             : 'bg-red-200 text-red-800'
                         }`}
                       >
-                        {order.status === 'delivered'
-                          ? 'Delivered'
+                        {order.status === 'completed'
+                          ? 'Completed'
                           : order.status === 'pending'
                           ? 'Pending'
                           : 'Cancelled'}{' '}
                       </div>
                     </td>
                     <td className="pt-3 pb-3 px-6 text-greyText ">
-                      {order.customerid}
+                    {getCustomerName(order.customerid)}
                     </td>
 
                     <td className="pt-3 pb-3 px-6 text-greyText ">
-                      {order.productid}
+                    {getProductTitle(order.productid)}
+                    </td>
+                    <td className="pt-3 pb-3 px-6 text-greyText ">
+                      {order.paymentmethod}
                     </td>
                     <td className="pt-3 pb-3 px-6 text-greyText ">
                       {order.price}
                     </td>
-
                     <td className="pt-3 pb-3 px-6">
                       <button
                         onClick={() =>

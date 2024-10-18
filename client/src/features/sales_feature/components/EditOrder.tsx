@@ -5,9 +5,9 @@ import { CreateOrderSchema } from '../utils/validation/CreateOrderSchema';
 import { CreateOrderFormValues } from '../types/interface';
 import {
   CustomSelectField,
-  CustomObjectSelectField,
   CustomNumberField,
   CustomSelectFieldTwo,
+  CustomTextField,
 
 } from './CustomTextField';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
@@ -46,9 +46,19 @@ const EditOrder: React.FC = () => {
     return <div>Error loading Customer data</div>;
   }
 
+  const findCustomerName = (customerId: string) => {
+    const customer = customersData?.customers.find(c => c._id === customerId);
+    return customer ? `${customer.name}` : '';
+  };
+
+  const findProductTitle = (productId: string) => {
+    const product = productsData?.products.find(p => p._id === productId);
+    return product ? product.title : '';
+  };
+
   const initialValues: CreateOrderFormValues = {
-    customerid: orderData?.order.customerid || '',
-    productid:  orderData?.order.productid || '',
+    customerid: orderData? findCustomerName(orderData.order.customerid) : '',
+    productid:  orderData? findProductTitle(orderData.order.productid) : '',
     paymentmethod:  orderData?.order.paymentmethod || '',
     price:  orderData?.order.price || 0,
     status:  orderData?.order.status || '',
@@ -87,7 +97,7 @@ const EditOrder: React.FC = () => {
         onSubmit={onSubmit}
         enableReinitialize
       >
-        {({ isSubmitting,setFieldValue }) => (
+        {({ isSubmitting }) => (
           <Form>
           <div className="w-[100%] mb-6 flex justify-between">
             <div className="flex space-x-5 items-start justify-start">
@@ -112,7 +122,7 @@ const EditOrder: React.FC = () => {
                 disabled={isSubmitting}
                 className="font-shopify1000 text-AABlack bg-gradient-to-b from-fafawhite to-fafawhite border border-AABlack py-2 px-4 rounded-xl hover:scale-105 transition-all ease-in-out duration-300"
               >
-                {isSubmitting ? <ButtonLoading /> : 'Create'}
+                {isSubmitting ? <ButtonLoading /> : 'Edit'}
               </button>
             </div>
           </div>
@@ -123,39 +133,28 @@ const EditOrder: React.FC = () => {
                 <h1 className="font-shopify1000 text-xl mb-2">Order Info</h1>
                 <Field
                   name="customerid"
-                  component={CustomObjectSelectField}
+                  component={CustomTextField}
                   label="Customer"
-                  options={customersData}
                   displayKey="name"
                   placeholder="Select a Customer"
                   disabled={true}
                 />
                 <Field
                   name="productid"
-                  component={CustomObjectSelectField}
+                  component={CustomTextField}
                   label="Product"
-                  options={productsData}
                   displayKey="title"
                   placeholder="Select a Product"
                   disabled={true}
-                  onChange={(selectedProductId: string) => {
-                    setFieldValue('productid', selectedProductId);
-                    const selectedProduct = productsData?.products?.find(
-                      (product) => product._id === selectedProductId
-                    );
-                    if (selectedProduct) {
-                      setFieldValue('price', selectedProduct.price);
-                    }
-                  }}
                 />
               </div>
               <div className="md:shadow-custom border border-gray-400 bg-white pt-4 pb-6 px-6 md:rounded-xl">
                 <h1 className="font-shopify1000 text-xl mb-2">Payment</h1>
                 <div className="flex justify-between items-center space-x-4">
                   <Field
-                    name="payment"
+                    name="paymentmethod"
                     component={CustomSelectField}
-                    label="payment"
+                    label="Payment Method"
                     placeholder="Payment Method"
                     disabled={true}
                   />
