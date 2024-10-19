@@ -3,22 +3,32 @@ import { useNavigate } from 'react-router-dom';
 import { useGetCustomersQuery } from '../api/customer-api';
 import { motion } from 'framer-motion';
 import { TextField, InputAdornment } from '@mui/material';
-import { MagnifyingGlassIcon, EyeIcon } from '@heroicons/react/24/outline';
+import { MagnifyingGlassIcon, EyeIcon, ExclamationCircleIcon } from '@heroicons/react/24/outline';
 import debounce from 'lodash/debounce';
 import NoCustomers from '../../../components/NoDataIntheTable';
 import Shimmer from '../../../components/Shimmer';
 import FeatureHeader from '../../../components/FeatureHeader';
 import ErrorInTheTable from '../../../components/ErrorInTheTable';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../stores/store';
 
 const CustomerList = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
+  const vendorid = useSelector((state:RootState)=>state.userSlice.userData?._id)
+
+   if(!vendorid){
+    return<>
+    <ErrorInTheTable/>
+    </>
+   }
+
 
   const {
     data: customersData,
     isLoading,
     isError,
-  } = useGetCustomersQuery(undefined, {
+  } = useGetCustomersQuery(vendorid, {
     refetchOnMountOrArgChange: true,
   });
 
@@ -36,21 +46,21 @@ const CustomerList = () => {
   if (customersData?.customers.length == 0) {
     return (
       <div>
-        <FeatureHeader feature="Customers" entity="customer" />
+        <FeatureHeader feature="customers" entity="customer" />
         <NoCustomers entity="Customers" />
       </div>
     );
   } else if (isLoading) {
     return (
       <div>
-        <FeatureHeader feature="Customers" entity="customer" />
+        <FeatureHeader feature="customers" entity="customer" />
         <Shimmer />
       </div>
     );
   } else if (isError) {
     return (
       <div>
-        <FeatureHeader feature="Customers" entity="customer" />
+        <FeatureHeader feature="customers" entity="customer" />
         <ErrorInTheTable />
       </div>
     );
@@ -59,6 +69,8 @@ const CustomerList = () => {
   const filteredCustomers = customersData?.customers.filter((customer) =>
     customer.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+
 
   return (
     <div>
@@ -100,7 +112,8 @@ const CustomerList = () => {
                 </tr>
               </thead>
               <tbody>
-                {filteredCustomers?.map((customer) => (
+                
+                { filteredCustomers?.map((customer) => (
                   <tr key={customer._id} className="border-t border-gray-400">
                     <td className="pt-3 pb-3 px-6 text-greyText font-semibold">
                       {customer.name}
@@ -141,7 +154,14 @@ const CustomerList = () => {
                   </tr>
                 ))}
               </tbody>
+             
             </table>
+            {filteredCustomers?.length == 0 && 
+<div className='w-full flex justify-center space-x-3 items-center min-h-32'>
+<ExclamationCircleIcon className="h-10"/>
+<h1>No Customers found</h1>
+</div>
+              }
           </div>
         </div>
       </motion.div>

@@ -29,7 +29,7 @@ export default class InventController {
   };
 getAllProducts = async (req:Request,res:Response)=>{
   try{
-      const AllProductsResponse = await this.service.getAllProducts(null) 
+      const AllProductsResponse = await this.service.getAllProducts(req.params.vendorid) 
       res.status(AllProductsResponse.status).json(AllProductsResponse);
   }catch{
     res
@@ -39,8 +39,9 @@ getAllProducts = async (req:Request,res:Response)=>{
       message: 'Internal Server Error' });  }
 }
  getProduct= async (req:Request,res:Response)=>{
-  try{const id = req.params.id as string
-      const getProductResponse = await this.service.getProduct(id) 
+  try{const id = req.params.id as string;
+    const vendorid = req.params.vendorid as string
+      const getProductResponse = await this.service.getProduct({vendorid:vendorid,id:id}) 
       res.status(getProductResponse.status).json(getProductResponse);
   }catch{
     res
@@ -51,8 +52,8 @@ getAllProducts = async (req:Request,res:Response)=>{
 }
 editProduct= async (req:Request,res:Response)=>{
   try{const _id = req.params.id as string
-    
-      const getProductResponse = await this.service.editProduct({_id,product:req.body.product}) 
+      const vendorid = req.params.vendorid as string
+      const getProductResponse = await this.service.editProduct({vendorid:vendorid,_id,product:req.body.product}) 
       res.status(getProductResponse.status).json(getProductResponse);
   }catch{
     res

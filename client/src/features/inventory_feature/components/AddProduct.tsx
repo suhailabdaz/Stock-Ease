@@ -14,21 +14,27 @@ import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import { useNavigate } from 'react-router-dom';
 import { useAddProductMutation } from '../api/inventory-api';
 import { toast } from 'sonner';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../stores/store';
 
-const initialValues: AddProductFormValues = {
-  title: '',
-  description: '',
-  stock: 0,
-  price: 0,
-  status: '',
-  publishing: [],
-  category: '',
-};
+
 
 const AddProduct: React.FC = () => {
   const navigate = useNavigate()
 
   const [useAddProduct] = useAddProductMutation()
+
+const vendorId = useSelector((state:RootState)=>state.userSlice.userData?._id)
+  const initialValues: AddProductFormValues = {
+    vendorid:vendorId?vendorId:'',
+    title: '',
+    description: '',
+    stock: 0,
+    price: 0,
+    status: '',
+    publishing: [],
+    category: '',
+  };
   const onSubmit = async (
     values: AddProductFormValues,
     actions: FormikHelpers<AddProductFormValues>

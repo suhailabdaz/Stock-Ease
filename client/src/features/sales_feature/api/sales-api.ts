@@ -1,5 +1,5 @@
 import { apiSlice } from '../../../api/api-slice';
-import { CreateOrderFormValues, CreateOrderResponse, AllOrderResponse, EditOrderRequest, SingleOrderResponse, AllCustomersResponse, AllProductsResponse } from '../types/interface';
+import { CreateOrderFormValues, CreateOrderResponse, AllOrderResponse, EditOrderRequest, SingleOrderResponse, AllCustomersResponse, AllProductsResponse, SingleOrderRequest } from '../types/interface';
 
 export const salesApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -12,9 +12,9 @@ export const salesApi = apiSlice.injectEndpoints({
       }),
       invalidatesTags: [{ type: 'Sales', id: 'LIST' }],
     }),
-    getOrders: builder.query<AllOrderResponse , void>({
-      query: () => ({
-        url: '/order/orders',
+    getOrders: builder.query<AllOrderResponse , string>({
+      query: (vendorid:string) => ({
+        url: `/order/orders/${vendorid}`,
         method: 'GET',
         credentials: 'include' as const,
       }),
@@ -26,9 +26,9 @@ export const salesApi = apiSlice.injectEndpoints({
             ]
           : [{ type: 'Sales', id: 'LIST' }],
     }),
-    getSingleOrder: builder.query<SingleOrderResponse, string>({
-      query: (id) => ({
-        url: `/order/single-order/${id}`,  
+    getSingleOrder: builder.query<SingleOrderResponse,SingleOrderRequest>({
+      query: ({vendorid,orderid}) => ({
+        url: `/order/single-order/${vendorid}/${orderid}`,  
         method: 'GET',
         credentials: 'include' as const, 
       }),
@@ -38,8 +38,8 @@ export const salesApi = apiSlice.injectEndpoints({
           : [{ type: 'Sales', _id: 'LIST' }],
     }),
     editOrder: builder.mutation<SingleOrderResponse, EditOrderRequest>({
-      query: ({ _id, status }) => ({
-        url: `/order/orders/${_id}`,
+      query: ({ vendorid,_id, status }) => ({
+        url: `/order/orders/${vendorid}/${_id}`,
         method: 'PATCH',
         body: {status},
         credentials: 'include' as const,
@@ -47,9 +47,9 @@ export const salesApi = apiSlice.injectEndpoints({
       invalidatesTags: (_result, _error, { _id }) => [{ type: 'Sales', _id }],
     }),
 
-    getCustomers: builder.query<AllCustomersResponse , void>({
-      query: () => ({
-        url: '/customer/customers',
+    getCustomers: builder.query<AllCustomersResponse , string>({
+      query: (vendorid) => ({
+        url: `/customer/customers/${vendorid}`,
         method: 'GET',
         credentials: 'include' as const,
       }),
@@ -61,9 +61,9 @@ export const salesApi = apiSlice.injectEndpoints({
             ]
           : [{ type: 'Customers', id: 'LIST' }],
     }),
-    getProducts: builder.query<AllProductsResponse , void>({
-      query: () => ({
-        url: '/inventory/products',
+    getProducts: builder.query<AllProductsResponse , string>({
+      query: (vendorid) => ({
+        url: `/inventory/products/${vendorid}`,
         method: 'GET',
         credentials: 'include' as const,
       }),

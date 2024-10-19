@@ -12,9 +12,9 @@ const asyncHandler = (fn: Function) => (req: Request, res: Response, next: NextF
   Promise.resolve(fn(req, res, next)).catch(next);
 
 custRouter.post('/customers',asyncHandler(jwtController.isAuthenticated),asyncHandler(controller.addCustomer));
-custRouter.get('/customers',asyncHandler(jwtController.isAuthenticated),asyncHandler(controller.getAllCustomers));
-custRouter.get('/single-customer/:id',asyncHandler(jwtController.isAuthenticated),asyncHandler(controller.getCustomer));
-custRouter.put('/customers/:id',asyncHandler(jwtController.isAuthenticated),asyncHandler(controller.editCustomer));
+custRouter.get('/customers/:vendorid',asyncHandler(jwtController.isAuthenticated),asyncHandler(controller.getAllCustomers));
+custRouter.get('/single-customer/:vendorid/:id',asyncHandler(jwtController.isAuthenticated),asyncHandler(controller.getCustomer));
+custRouter.put('/customers/:vendorid/:id',asyncHandler(jwtController.isAuthenticated),asyncHandler(controller.editCustomer));
 
 
 export default custRouter;

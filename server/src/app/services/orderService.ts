@@ -6,6 +6,7 @@ import {
   EditOrderReq,
   EditOrderREsponse,
   GetOrderResponse,
+  GetOrderReq,
 } from '../../interfaces/iDTOs/iOrderDTO';
 import IOrderRepository from '../../interfaces/iRepositories/iOrderRepository';
 import IOrderService from '../../interfaces/iServices/iOrderService';
@@ -36,7 +37,7 @@ export default class OrderService implements IOrderService {
     data: AllOrdersReq
   ): Promise<AllOrdersResponse | null> {
     try {
-      const AllOrders = await this.repository.getAllOrders();
+      const AllOrders = await this.repository.getAllOrders(data);
       if (AllOrders) {
         return AllOrders
       } else {
@@ -50,7 +51,7 @@ export default class OrderService implements IOrderService {
   async editOrder(data: EditOrderReq): Promise<EditOrderREsponse | null> {
     try {   
       
-      const Order = await this.repository.editOrder(data._id,data.status);
+      const Order = await this.repository.editOrder(data.vendorid,data._id,data.status);
       if (Order) {
         return Order
       } else {
@@ -61,10 +62,10 @@ export default class OrderService implements IOrderService {
     }
     }
   async getOrder(
-    data: string
+    data: GetOrderReq
   ): Promise<GetOrderResponse | null> {
     try {
-      const Order = await this.repository.findOrder(data);
+      const Order = await this.repository.findOrder(data.vendorid,data.id);
       if (Order) {
         return Order
       } else {

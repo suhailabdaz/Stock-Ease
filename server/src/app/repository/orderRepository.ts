@@ -6,9 +6,9 @@ import generateOrderId from '../../utils/orderIdGenerate';
 
 export default class OrderRepository implements IOrderRepository {
 
-  async getAllOrders(): Promise<ResOrder[] | null> {
-    const orders = await OrderModel.find();
-    return orders.length > 0 ? (orders as ResOrder[]) : null;
+  async getAllOrders(vendorid:string): Promise<ResOrder[] | null> {
+    const orders = await OrderModel.find({vendorid:vendorid});
+    return orders? (orders as ResOrder[]) : null;
   }
 
   async saveOrder(order: ReqOrder): Promise<ResOrder | null> {
@@ -38,21 +38,23 @@ export default class OrderRepository implements IOrderRepository {
     }
   }
 
-  async editOrder(id: string, status: string): Promise< ResOrder | null> {
-    
+  async editOrder(vendorid:string,id: string, status: string): Promise< ResOrder | null> {
+    const existingOrder = await OrderModel.findOne({ _id: id, vendorid });
+    if(!existingOrder){
+      return null
+    }
     const updatedOrder = await OrderModel.findByIdAndUpdate(
       id,
       { status },
       { new: true, runValidators: true }
     );
     
-    console.log(updatedOrder); // Log the updated order
     return updatedOrder ? (updatedOrder as ResOrder) : null;
 }
 
   
-  async findOrder(id: string): Promise<ResOrder | null> {
-    const Order = await OrderModel.findById(id);
+  async findOrder(vendorid:string,id: string): Promise<ResOrder | null> {
+    const Order = await OrderModel.findOne({vendorid:vendorid,_id:id });
     return Order ? (Order as ResOrder) : (null as null);
   }
 }

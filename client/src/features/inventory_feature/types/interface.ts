@@ -2,6 +2,7 @@ import { FieldProps } from 'formik';
 
 
 export interface AddProductFormValues {
+  vendorid:string;
   title: string;
   description: string;
   category:string;
@@ -23,6 +24,7 @@ export interface AddProductResponse {
 }
 
 export interface EditProductRequest{
+  vendorid:string,
   _id:string,
   product:AddProductFormValues
 }
@@ -33,6 +35,11 @@ export interface Product extends AddProductFormValues{
 
 export interface SingleProductResponse extends AddProductResponse{
   product:Product
+}
+
+export interface SingleProductRequest{
+  vendorid:string;
+  productid:string;
 }
 
 

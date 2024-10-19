@@ -2,6 +2,7 @@ import { FieldProps } from 'formik';
 
 
 export interface CreateOrderFormValues {
+  vendorid:string
   productid: string;
   customerid: string;
   paymentmethod:string;
@@ -21,6 +22,7 @@ export interface CreateOrderResponse {
 }
 
 export interface Customer{
+  vendorid:string;
   _id:string
   name: string;
   address: string;
@@ -35,6 +37,7 @@ export interface AllCustomersResponse extends CreateOrderResponse {
 
 export interface EditOrderRequest{
   _id:string,
+  vendorid:string,
   status:string
 }
 
@@ -47,11 +50,17 @@ export interface SingleOrderResponse extends CreateOrderResponse{
   order:Order
 }
 
+export interface SingleOrderRequest {
+  vendorid:string,
+  orderid:string
+}
+
 
 export interface AllOrderResponse extends CreateOrderResponse {
   orders : Order[]
 }
 export interface Product {
+  vendorid:string;
   _id:string;
   title: string;
   description: string;

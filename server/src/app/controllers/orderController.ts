@@ -32,7 +32,8 @@ export default class OrderController {
   };
   getAllOrders = async (req: Request, res: Response) => {
     try {
-      const AllOrdersResponse = await this.service.getAllOrders(null);
+      const vendorid =  req.params.vendorid as string
+      const AllOrdersResponse = await this.service.getAllOrders(vendorid);
       res.status(StatusCode.OK).json({orders:AllOrdersResponse});
     } catch {
       res.status(StatusCode.InternalServerError).json({
@@ -44,7 +45,8 @@ export default class OrderController {
   getOrder = async (req: Request, res: Response) => {
     try {
       const id = req.params.id as string;
-      const getOrderResponse = await this.service.getOrder(id);
+      const vendorid = req.params.vendorid as string
+      const getOrderResponse = await this.service.getOrder({vendorid,id});
       res.status(StatusCode.OK).json({order:getOrderResponse});
     } catch {
       res.status(StatusCode.InternalServerError).json({
@@ -56,8 +58,9 @@ export default class OrderController {
   editOrder = async (req: Request, res: Response) => {
     try {
       const _id = req.params.id as string;
-
+      const vendorid = req.params.vendorid as string
       const getOrderResponse = await this.service.editOrder({
+        vendorid,
         _id,
         status: req.body.status,
       });

@@ -17,27 +17,38 @@ import { toast } from 'sonner';
 import { ButtonLoading } from '../../../components/ButtonLoading';
 import Shimmer from '../../../components/Shimmer';
 import ErrorInTheTable from '../../../components/ErrorInTheTable';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../stores/store';
 
 
 const EditOrder: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
+
+  const vendorid = useSelector((state:RootState)=>state.userSlice.userData?._id)
   
-  if(!id){
-    return null
+  if(!id || !vendorid){
+    return (
+      <>
+      <ErrorInTheTable/>
+      </>
+    )
   }
 
-  const { data: orderData, isLoading, isError } = useGetSingleOrderQuery(id,{
+
+  const { data: orderData, isLoading, isError } = useGetSingleOrderQuery({orderid:id,vendorid:vendorid},{
     refetchOnMountOrArgChange:true
   });
 
-  const { data: productsData } = useGetProductsQuery(undefined, {
+  const { data: productsData } = useGetProductsQuery(vendorid, {
     refetchOnMountOrArgChange: true,
   });
 
-  const { data: customersData } = useGetCustomersQuery(undefined, {
+  const { data: customersData } = useGetCustomersQuery(vendorid, {
     refetchOnMountOrArgChange: true,
   });
+
+
   
   const [updateOrder] = useEditOrderMutation();
 
@@ -53,6 +64,15 @@ const EditOrder: React.FC = () => {
     </div>;
   }
 
+  if(!customersData || !productsData || !orderData){
+    return (
+      <>
+      <ErrorInTheTable/>
+      </>
+    )
+  }
+
+
   const findCustomerName = (customerId: string) => {
     const customer = customersData?.customers.find(c => c._id === customerId);
     return customer ? `${customer.name}` : '';
@@ -64,11 +84,12 @@ const EditOrder: React.FC = () => {
   };
 
   const initialValues: CreateOrderFormValues = {
-    customerid: orderData? findCustomerName(orderData.order.customerid) : '',
-    productid:  orderData? findProductTitle(orderData.order.productid) : '',
-    paymentmethod:  orderData?.order.paymentmethod || '',
-    price:  orderData?.order.price || 0,
-    status:  orderData?.order.status || '',
+    vendorid:vendorid,
+    customerid:findCustomerName(orderData.order.customerid) ,
+    productid: findProductTitle(orderData.order.productid) ,
+    paymentmethod:  orderData?.order.paymentmethod,
+    price:  orderData?.order.price ,
+    status:  orderData?.order.status,
   };
 
 
@@ -78,6 +99,7 @@ const EditOrder: React.FC = () => {
   ) => {
     try {
       const response = await updateOrder({
+        vendorid:vendorid,
         _id: id, 
         status: values.status,
       }).unwrap();

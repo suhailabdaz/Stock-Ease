@@ -1,5 +1,5 @@
 import { apiSlice } from '../../../api/api-slice';
-import { AddCustomerFormValues, AddCustomerResponse, AllCustomersResponse, EditCustomerRequest, SingleCustomerResponse } from '../types/interface';
+import { AddCustomerFormValues, AddCustomerResponse, AllCustomersResponse, EditCustomerRequest, SingleCustomerResponse, SingleCustRequest } from '../types/interface';
 
 export const custApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -12,9 +12,9 @@ export const custApi = apiSlice.injectEndpoints({
       }),
       invalidatesTags: [{ type: 'Products', id: 'LIST' }],
     }),
-    getCustomers: builder.query<AllCustomersResponse , void>({
-      query: () => ({
-        url: '/customer/customers',
+    getCustomers: builder.query<AllCustomersResponse , string>({
+      query: (vendorid) => ({
+        url: `/customer/customers/${vendorid}`,
         method: 'GET',
         credentials: 'include' as const,
       }),
@@ -26,9 +26,9 @@ export const custApi = apiSlice.injectEndpoints({
             ]
           : [{ type: 'Customers', id: 'LIST' }],
     }),
-    getSingleCustomer: builder.query<SingleCustomerResponse, string>({
-      query: (id) => ({
-        url: `/customer/single-customer/${id}`,  
+    getSingleCustomer: builder.query<SingleCustomerResponse, SingleCustRequest>({
+      query: ({vendorid,customerid}) => ({
+        url: `/customer/single-customer/${vendorid}/${customerid}`,  
         method: 'GET',
         credentials: 'include' as const, 
       }),
@@ -38,8 +38,8 @@ export const custApi = apiSlice.injectEndpoints({
           : [{ type: 'Customers', _id: 'LIST' }],
     }),
     editCustomer: builder.mutation<SingleCustomerResponse, EditCustomerRequest>({
-      query: ({ _id, ...data }) => ({
-        url: `/customer/customers/${_id}`,
+      query: ({ vendorid,_id, ...data }) => ({
+        url: `/customer/customers/${vendorid}/${_id}`,
         method: 'PUT',
         body: data,
         credentials: 'include' as const,

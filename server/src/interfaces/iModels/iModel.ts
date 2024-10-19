@@ -7,6 +7,7 @@ export interface UserInterface extends Document {
 }
 
 export interface ProductInterface extends Document {
+  vendorid:string;
   title: string;
   description: string;
   category:string;
@@ -17,6 +18,7 @@ export interface ProductInterface extends Document {
 }
 
 export interface CustomerInterface extends Document {
+  vendorid:string;
   name: string;
   address: string;
   pincode:string;
@@ -26,6 +28,7 @@ export interface CustomerInterface extends Document {
 
 
 export interface OrderInterface extends Document {
+  vendorid:string;
   orderid:string;
   productid: string;
   customerid: string;

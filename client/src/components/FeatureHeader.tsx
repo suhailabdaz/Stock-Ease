@@ -14,7 +14,7 @@ type Props = {
           {props.feature}
         </h1>
         <button
-          onClick={() => navigate(`/customers/add-${props.entity}`)}
+          onClick={() => navigate(`/${props.feature}/add-${props.entity}`)}
           className="font-shopify1000 text-fafawhite bg-gradient-to-b from-buttonTop to-buttonBootom py-2 px-3 rounded-xl hover:scale-105 transition-all ease-in-out duration-300"
         >
           Add {props.feature}

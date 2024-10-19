@@ -7,6 +7,10 @@ const OrderSchema: Schema<OrderInterface> = new Schema(
       type: String,
       required: true,
     },
+    vendorid:{
+      type:String,
+      required:true,
+    },
     customerid: {
       type: String,
       required: true,

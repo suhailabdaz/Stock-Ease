@@ -7,32 +7,44 @@ import {
 } from '../api/sales-api';
 import { motion } from 'framer-motion';
 import { TextField, InputAdornment } from '@mui/material';
-import { MagnifyingGlassIcon, EyeIcon } from '@heroicons/react/24/outline';
+import { MagnifyingGlassIcon, EyeIcon, ExclamationCircleIcon } from '@heroicons/react/24/outline';
 import debounce from 'lodash/debounce';
 import NoOrders from '../../../components/NoDataIntheTable';
 import Shimmer from '../../../components/Shimmer';
 import FeatureHeader from '../../../components/FeatureHeader';
 import ErrorInTheTable from '../../../components/ErrorInTheTable';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../stores/store';
 
 const OrderList = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
 
+  const vendorid = useSelector((state:RootState)=>state.userSlice.userData?._id)
+
+  if(!vendorid){
+    return (
+      <>
+      <ErrorInTheTable/>
+      </>
+    )
+  }
+
   const {
     data: ordersData,
     isLoading,
     isError,
-  } = useGetOrdersQuery(undefined, {
+  } = useGetOrdersQuery(vendorid, {
     refetchOnMountOrArgChange: true,
   });
 
   const { data: productsData, isLoading: isProductsLoading } =
-    useGetProductsQuery(undefined, {
+    useGetProductsQuery(vendorid, {
       refetchOnMountOrArgChange: true,
     });
 
   const { data: customersData, isLoading: isCustomersLoading } =
-    useGetCustomersQuery(undefined, {
+    useGetCustomersQuery(vendorid, {
       refetchOnMountOrArgChange: true,
     });
 
@@ -50,7 +62,7 @@ const OrderList = () => {
   if (ordersData?.orders.length == 0) {
     return (
       <div>
-        <FeatureHeader entity="order" feature="Orders" />
+        <FeatureHeader entity="order" feature="orders" />
         <NoOrders entity="Orders" />
       </div>
     );
@@ -175,6 +187,12 @@ const OrderList = () => {
                 ))}
               </tbody>
             </table>
+            {filteredOrders?.length == 0 && 
+<div className='w-full flex justify-center space-x-3 items-center min-h-32'>
+<ExclamationCircleIcon className="h-10"/>
+<h1>No Orders found</h1>
+</div>
+              }
           </div>
         </div>
       </motion.div>

@@ -12,18 +12,24 @@ import { useNavigate } from 'react-router-dom';
 import { useAddCustomerMutation } from '../api/customer-api';
 import { toast } from 'sonner';
 import { ButtonLoading } from '../../../components/ButtonLoading';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../stores/store';
 
-const initialValues: AddCustomerFormValues = {
-  name: '',
-  address: '',
-  pincode: '',
-  mobile: '',
-  status: '',
-};
+
 
 const AddCustomer: React.FC = () => {
   const navigate = useNavigate()
+  const vendorId = useSelector((state:RootState)=> state.userSlice.userData?._id)
 
+  const initialValues: AddCustomerFormValues = {
+    vendorid:vendorId?vendorId:'',
+    name: '',
+    address: '',
+    pincode: '',
+    mobile: '',
+    status: '',
+  };
+  
   const [useAddCustomer] = useAddCustomerMutation()
   const onSubmit = async (
     values: AddCustomerFormValues,

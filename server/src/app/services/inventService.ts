@@ -8,6 +8,7 @@ import {
   EditProductReq,
   EditProductRes,
   GetProductRes,
+  GetProductReq,
 } from '../../interfaces/iDTOs/iInventDTO';
 import IProductRepository from '../../interfaces/iRepositories/iProductRepository';
 import iInventService from '../../interfaces/iServices/iInventService';
@@ -47,7 +48,7 @@ export default class InventService implements iInventService {
     data: AllProductsReq
   ): Promise<AllProductsRes | ErrorRes> {
     try {
-      const AllProduct = await this.repository.getAllProducts();
+      const AllProduct = await this.repository.getAllProducts(data);
       if (AllProduct) {
         return {
           status: StatusCode.OK as number,
@@ -72,7 +73,7 @@ export default class InventService implements iInventService {
     try {
       console.log(data.product,"inservice");
       
-      const Product = await this.repository.editProduct(data._id,data.product);
+      const Product = await this.repository.editProduct(data.vendorid,data._id,data.product);
       if (Product) {
         return {
           status: StatusCode.OK as number,
@@ -93,10 +94,10 @@ export default class InventService implements iInventService {
     }
     }
   async getProduct(
-    data: string
+    data: GetProductReq
   ): Promise<GetProductRes | ErrorRes> {
     try {
-      const Product = await this.repository.findProduct(data);
+      const Product = await this.repository.findProduct(data.vendorid,data.id);
       if (Product) {
         return {
           status: StatusCode.OK as number,

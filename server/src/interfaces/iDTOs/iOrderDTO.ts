@@ -4,15 +4,19 @@ export type CreateOrderReq = ReqOrder
 
 export type CreateOrderResponse = ResOrder
 
-export type GetOrderReq = string
+export interface GetOrderReq {
+  vendorid:string,
+  id:string
+}
 
 export type GetOrderResponse  = ResOrder
 
-export type AllOrdersReq = null
+export type AllOrdersReq = string
 
 export type AllOrdersResponse = ResOrder[]
 
 export interface EditOrderReq{
+  vendorid:string
   _id:string,
   status:string
 }

@@ -18,26 +18,49 @@ import {
 } from '../api/sales-api';
 import { toast } from 'sonner';
 import { ButtonLoading } from '../../../components/ButtonLoading';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../stores/store';
+import ErrorInTheTable from '../../../components/ErrorInTheTable';
 
-const initialValues: CreateOrderFormValues = {
-  customerid: '',
-  productid: '',
-  paymentmethod: '',
-  price: 0,
-  status: '',
-};
+
 
 const CreateOrder: React.FC = () => {
   const navigate = useNavigate();
 
+  const vendorId = useSelector((state:RootState)=>state.userSlice.userData?._id)
+
+  if(!vendorId){
+    return(
+      <>
+      <ErrorInTheTable/></>
+    )
+  }
+
+  const initialValues: CreateOrderFormValues = {
+    vendorid:vendorId,
+    customerid: '',
+    productid: '',
+    paymentmethod: '',
+    price: 0,
+    status: '',
+  };
+
   const [createOrder, { isLoading: isCreatingOrder }] = useCreateOrderMutation();
-  const { data: productsData,isLoading:isProductsLoading } = useGetProductsQuery(undefined, {
+  const { data: productsData,isLoading:isProductsLoading } = useGetProductsQuery(vendorId, {
     refetchOnMountOrArgChange: true,
   });
 
-  const { data: customersData,isLoading: isCustomersLoading  } = useGetCustomersQuery(undefined, {
+  const { data: customersData,isLoading: isCustomersLoading  } = useGetCustomersQuery(vendorId, {
     refetchOnMountOrArgChange: true,
   });
+
+  if(!customersData || !productsData){
+    return (
+      <>
+      <ErrorInTheTable/>
+      </>
+    )
+  }
 
   const productRatata = productsData?.products.filter((product: any) => product.stock > 0);
 

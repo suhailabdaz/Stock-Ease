@@ -14,22 +14,44 @@ import { toast } from 'sonner';
 import { ButtonLoading } from '../../../components/ButtonLoading';
 import Shimmer from '../../../components/Shimmer';
 import ErrorInTheTable from '../../../components/ErrorInTheTable';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../stores/store';
 
 const EditCustomer: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
 
-  if (!id) {
-    return null;
+  const vendorId = useSelector(
+    (state: RootState) => state.userSlice.userData?._id
+  );
+
+  if (!id || !vendorId) {
+    return (
+      <>
+        <ErrorInTheTable />
+      </>
+    );
   }
 
   const {
     data: customerData,
     isLoading,
     isError,
-  } = useGetSingleCustomerQuery(id, {
-    refetchOnMountOrArgChange: true,
-  });
+  } = useGetSingleCustomerQuery(
+    { vendorid: vendorId, customerid: id },
+    {
+      refetchOnMountOrArgChange: true,
+    }
+  );
+
+  if (!customerData) {
+    return (
+      <>
+        <ErrorInTheTable />
+      </>
+    );
+  }
+
   const [updateCustomer] = useEditCustomerMutation();
 
   if (isLoading) {
@@ -49,11 +71,12 @@ const EditCustomer: React.FC = () => {
   }
 
   const initialValues: AddCustomerFormValues = {
-    name: customerData?.customer.name || '',
-    address: customerData?.customer.address || '',
-    pincode: customerData?.customer.pincode || '',
-    mobile: customerData?.customer.mobile || '',
-    status: customerData?.customer.status || '',
+    vendorid: vendorId,
+    name: customerData?.customer.name,
+    address: customerData?.customer.address,
+    pincode: customerData?.customer.pincode,
+    mobile: customerData?.customer.mobile,
+    status: customerData?.customer.status,
   };
 
   const onSubmit = async (
@@ -62,6 +85,7 @@ const EditCustomer: React.FC = () => {
   ) => {
     try {
       const response = await updateCustomer({
+        vendorid:vendorId,
         _id: id,
         customer: values,
       }).unwrap();

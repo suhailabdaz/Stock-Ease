@@ -28,7 +28,7 @@ export default class CustController {
   };
   getAllCustomers = async (req: Request, res: Response) => {
     try {
-      const AllCustomersResponse = await this.service.getAllCustomers(null);
+      const AllCustomersResponse = await this.service.getAllCustomers(req.params.vendorid);
       res.status(AllCustomersResponse.status).json(AllCustomersResponse);
     } catch {
       res.status(StatusCode.InternalServerError).json({
@@ -40,7 +40,8 @@ export default class CustController {
   getCustomer = async (req: Request, res: Response) => {
     try {
       const id = req.params.id as string;
-      const getCustomerResponse = await this.service.getCustomer(id);
+      const vendorid = req.params.vendorid as string
+      const getCustomerResponse = await this.service.getCustomer({vendorid,id});
       res.status(getCustomerResponse.status).json(getCustomerResponse);
     } catch {
       res.status(StatusCode.InternalServerError).json({
@@ -52,8 +53,9 @@ export default class CustController {
   editCustomer = async (req: Request, res: Response) => {
     try {
       const _id = req.params.id as string;
-
+      const vendorid = req.params.vendorid as string
       const getCustomerResponse = await this.service.editCustomer({
+        vendorid:vendorid,
         _id,
         customer: req.body.customer,
       });

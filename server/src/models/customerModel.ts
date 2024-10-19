@@ -7,6 +7,10 @@ const CustomerSchema: Schema<CustomerInterface> = new Schema(
       type: String,
       required: true,
     },
+    vendorid:{
+      type:String,
+      required:true,
+    },
     address: {
       type: String,
       required: true,

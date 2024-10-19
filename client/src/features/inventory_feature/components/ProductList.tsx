@@ -3,22 +3,36 @@ import { useNavigate } from 'react-router-dom';
 import { useGetProductsQuery } from '../api/inventory-api';
 import { motion } from 'framer-motion';
 import { TextField, InputAdornment } from '@mui/material';
-import { MagnifyingGlassIcon, EyeIcon } from '@heroicons/react/24/outline';
+import { MagnifyingGlassIcon, EyeIcon, ExclamationCircleIcon } from '@heroicons/react/24/outline';
 import debounce from 'lodash/debounce';
 import NoProducts from '../../../components/NoDataIntheTable';
 import Shimmer from '../../../components/Shimmer';
 import FeatureHeader from '../../../components/FeatureHeader';
 import ErrorInTheTable from '../../../components/ErrorInTheTable';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../stores/store';
 
 const ProductList = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
 
+  const vendorId = useSelector(
+    (state: RootState) => state.userSlice.userData?._id
+  );
+
+  if (!vendorId) {
+    return (
+      <>
+        <ErrorInTheTable />
+      </>
+    );
+  }
+
   const {
     data: productsData,
     isLoading,
     isError,
-  } = useGetProductsQuery(undefined, {
+  } = useGetProductsQuery(vendorId, {
     refetchOnMountOrArgChange: true,
   });
 
@@ -36,21 +50,21 @@ const ProductList = () => {
   if (productsData?.products.length == 0) {
     return (
       <div>
-        <FeatureHeader entity="products" feature="Products" />
-        <NoProducts entity='Products' />
+        <FeatureHeader entity="product" feature="products" />
+        <NoProducts entity="Products" />
       </div>
     );
   } else if (isLoading) {
     return (
       <div>
-        <FeatureHeader entity="products" feature="Products" />
+        <FeatureHeader entity="product" feature="products" />
         <Shimmer />
       </div>
     );
   } else if (isError) {
     return (
       <div>
-        <FeatureHeader entity="products" feature="Products" />
+        <FeatureHeader entity="products" feature="products" />
         <ErrorInTheTable />
       </div>
     );
@@ -62,8 +76,8 @@ const ProductList = () => {
 
   return (
     <div>
-        <FeatureHeader entity="products" feature="Products" />
-        <motion.div
+      <FeatureHeader entity="products" feature="Products" />
+      <motion.div
         key="add-product"
         initial={{ x: '1%', opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
@@ -146,6 +160,12 @@ const ProductList = () => {
                 ))}
               </tbody>
             </table>
+            {filteredProducts?.length == 0 && 
+<div className='w-full flex justify-center space-x-3 items-center min-h-32'>
+<ExclamationCircleIcon className="h-10"/>
+<h1>No Products found</h1>
+</div>
+              }
           </div>
         </div>
       </motion.div>

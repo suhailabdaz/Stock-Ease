@@ -17,19 +17,35 @@ import { toast } from 'sonner';
 import { ButtonLoading } from '../../../components/ButtonLoading';
 import Shimmer from '../../../components/Shimmer';
 import ErrorInTheTable from '../../../components/ErrorInTheTable';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../stores/store';
 
 
 const EditProduct: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   
-  if(!id){
-    return null
+  
+  const vendorid = useSelector((state:RootState)=> state.userSlice.userData?._id)
+
+  if(!id || !vendorid){
+    return (
+    <>
+    <ErrorInTheTable/>
+    </>
+    )
   }
 
-  const { data: productData, isLoading, isError } = useGetSingleProductQuery(id,{
+  const { data: productData, isLoading, isError } = useGetSingleProductQuery({vendorid:vendorid,productid:id},{
     refetchOnMountOrArgChange:true
   });
+
+  if(! productData){
+    return (
+    <>
+    <ErrorInTheTable/>
+    </>)
+  }
   const [updateProduct] = useEditProductMutation();
 
   if (isLoading) {
@@ -45,13 +61,14 @@ const EditProduct: React.FC = () => {
   }
 
   const initialValues: AddProductFormValues = {
-    title: productData?.product.title || '',
-    description: productData?.product.description || '',
-    stock: productData?.product.stock || 0,
-    price: productData?.product.price || 0,
-    status: productData?.product.status || '',
-    publishing: productData?.product.publishing || [],
-    category: productData?.product.category || '',
+    vendorid: vendorid,
+    title: productData?.product.title ,
+    description: productData?.product.description ,
+    stock: productData?.product.stock ,
+    price: productData?.product.price ,
+    status: productData?.product.status ,
+    publishing: productData?.product.publishing ,
+    category: productData?.product.category ,
   };
 
   const onSubmit = async (
@@ -60,6 +77,7 @@ const EditProduct: React.FC = () => {
   ) => {
     try {
       const response = await updateProduct({
+        vendorid:vendorid,
         _id: id, 
         product: values,
       }).unwrap();

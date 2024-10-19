@@ -9,7 +9,7 @@ const SalesPage = () => {
       <div className="absolute inset-0  items-start justify-start p-10">
         <Routes>
           <Route index element={<OrdersList />} />
-          <Route path="create-order" element={<CreateOrder />} />
+          <Route path="add-order" element={<CreateOrder />} />
           <Route path="edit-order/:id" element={<EditOrder />} />
         </Routes>{' '}
       </div>

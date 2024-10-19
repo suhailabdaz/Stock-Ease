@@ -4,19 +4,23 @@ export type AddProductReq = Product
 
 export type AddProductResponse = StatusMessage
 
-export type GetProductReq = string
+export interface GetProductReq {
+  vendorid:string,
+  id:string
+}
 
 export interface GetProductRes extends StatusMessage{
   product:Productwithid
 }
 
-export type AllProductsReq = null
+export type AllProductsReq = string
 
 export interface AllProductsRes extends StatusMessage {
   products:Productwithid[]
 }
 
 export interface EditProductReq{
+  vendorid:string,
   _id:string,
   product:Product
 }

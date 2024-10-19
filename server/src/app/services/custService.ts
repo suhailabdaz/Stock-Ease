@@ -8,6 +8,7 @@ import {
   EditCustomerReq,
   EditCustomerRes,
   GetCustomerRes,
+  GetCustomerReq,
 } from '../../interfaces/iDTOs/iCustDTO';
 import ICustomerRepository from '../../interfaces/iRepositories/iCustomerRepository';
 import iCustService from '../../interfaces/iServices/iCustService';
@@ -47,7 +48,7 @@ export default class CustService implements iCustService {
     data: AllCustomersReq
   ): Promise<AllCustomersRes | ErrorRes> {
     try {
-      const AllCustomer = await this.repository.getAllCustomers();
+      const AllCustomer = await this.repository.getAllCustomers(data);
       if (AllCustomer) {
         return {
           status: StatusCode.OK as number,
@@ -70,7 +71,7 @@ export default class CustService implements iCustService {
 
   async editCustomer(data: EditCustomerReq): Promise<EditCustomerRes | ErrorRes> {
     try {      
-      const Customer = await this.repository.editCustomer(data._id,data.customer);
+      const Customer = await this.repository.editCustomer(data.vendorid,data._id,data.customer);
       if (Customer) {
         return {
           status: StatusCode.OK as number,
@@ -91,10 +92,10 @@ export default class CustService implements iCustService {
     }
     }
   async getCustomer(
-    data: string
+    data: GetCustomerReq
   ): Promise<GetCustomerRes | ErrorRes> {
     try {
-      const Customer = await this.repository.findCustomer(data);
+      const Customer = await this.repository.findCustomer(data.vendorid,data.id);
       if (Customer) {
         return {
           status: StatusCode.OK as number,

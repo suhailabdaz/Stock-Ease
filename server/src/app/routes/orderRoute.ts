@@ -12,9 +12,9 @@ const asyncHandler = (fn: Function) => (req: Request, res: Response, next: NextF
   Promise.resolve(fn(req, res, next)).catch(next);
 
 orderRouter.post('/orders',asyncHandler(jwtController.isAuthenticated),asyncHandler(controller.createOrder));
-orderRouter.get('/orders',asyncHandler(jwtController.isAuthenticated),asyncHandler(controller.getAllOrders));
-orderRouter.get('/single-order/:id',asyncHandler(jwtController.isAuthenticated),asyncHandler(controller.getOrder));
-orderRouter.patch('/orders/:id',asyncHandler(jwtController.isAuthenticated),asyncHandler(controller.editOrder));
+orderRouter.get('/orders/:vendorid',asyncHandler(jwtController.isAuthenticated),asyncHandler(controller.getAllOrders));
+orderRouter.get('/single-order/:vendorid/:id',asyncHandler(jwtController.isAuthenticated),asyncHandler(controller.getOrder));
+orderRouter.patch('/orders/:vendorid/:id',asyncHandler(jwtController.isAuthenticated),asyncHandler(controller.editOrder));
 
 
 export default orderRouter;

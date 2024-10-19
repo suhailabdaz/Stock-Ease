@@ -3,6 +3,10 @@ import mongoose, { Schema } from 'mongoose';
 
 const ProductSchema: Schema<ProductInterface> = new Schema(
   {
+    vendorid:{
+      type:String,
+      required:true,
+    },
     title: {
       type: String,
       required: true,

@@ -38,6 +38,7 @@ export interface ItokenOptions {
 
 export  interface Productwithid {
   _id:string;
+  vendorid:string;
   title: string;
   description: string;
   category:string;
@@ -48,6 +49,7 @@ export  interface Productwithid {
 }
 
 export  interface Product {
+  vendorid:string,
   title: string;
   description: string;
   category:string;
@@ -59,6 +61,7 @@ export  interface Product {
 
 export  interface Customerwithid {
   _id:string;
+  vendorid:string,
   name: string;
   address: string;
   pincode:string;
@@ -67,6 +70,7 @@ export  interface Customerwithid {
 }
 
 export  interface Customer {
+  vendorid:string,
   name: string;
   address: string;
   pincode:string;

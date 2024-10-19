@@ -1,5 +1,5 @@
 import { apiSlice } from '../../../api/api-slice';
-import { AddProductFormValues, AddProductResponse, AllProductsResponse, EditProductRequest, SingleProductResponse } from '../types/interface';
+import { AddProductFormValues, AddProductResponse, AllProductsResponse, EditProductRequest, SingleProductRequest, SingleProductResponse } from '../types/interface';
 
 export const inventApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -12,9 +12,9 @@ export const inventApi = apiSlice.injectEndpoints({
       }),
       invalidatesTags: [{ type: 'Products', id: 'LIST' }],
     }),
-    getProducts: builder.query<AllProductsResponse , void>({
-      query: () => ({
-        url: '/inventory/products',
+    getProducts: builder.query<AllProductsResponse , string>({
+      query: (vendorid) => ({
+        url: `/inventory/products/${vendorid}`,
         method: 'GET',
         credentials: 'include' as const,
       }),
@@ -26,9 +26,9 @@ export const inventApi = apiSlice.injectEndpoints({
             ]
           : [{ type: 'Products', id: 'LIST' }],
     }),
-    getSingleProduct: builder.query<SingleProductResponse, string>({
-      query: (id) => ({
-        url: `/inventory/single-product/${id}`,  
+    getSingleProduct: builder.query<SingleProductResponse, SingleProductRequest>({
+      query: ({vendorid,productid}) => ({
+        url: `/inventory/single-product/${vendorid}/${productid}`,  
         method: 'GET',
         credentials: 'include' as const, 
       }),
@@ -38,8 +38,8 @@ export const inventApi = apiSlice.injectEndpoints({
           : [{ type: 'Products', _id: 'LIST' }],
     }),
     editProduct: builder.mutation<SingleProductResponse, EditProductRequest>({
-      query: ({ _id, ...data }) => ({
-        url: `/inventory/products/${_id}`,
+      query: ({ vendorid,_id, ...data }) => ({
+        url: `/inventory/products/${vendorid}/${_id}`,
         method: 'PUT',
         body: data,
         credentials: 'include' as const,
