@@ -3,42 +3,56 @@ import { Field, Form, Formik, FormikHelpers } from 'formik';
 import { motion } from 'framer-motion';
 import { AddCustomerSchema } from '../utils/validation/AddCustomerSchema';
 import { AddCustomerFormValues } from '../types/interface';
-import {
-  CustomTextField,
-  CustomSelectField,
-} from './CustomTextField';
+import { CustomTextField, CustomSelectField } from './CustomTextField';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useEditCustomerMutation, useGetSingleCustomerQuery } from '../api/customer-api';
+import {
+  useEditCustomerMutation,
+  useGetSingleCustomerQuery,
+} from '../api/customer-api';
 import { toast } from 'sonner';
 import { ButtonLoading } from '../../../components/ButtonLoading';
+import Shimmer from '../../../components/Shimmer';
+import ErrorInTheTable from '../../../components/ErrorInTheTable';
 
 const EditCustomer: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
-  
-  if(!id){
-    return null
+
+  if (!id) {
+    return null;
   }
 
-  const { data: customerData, isLoading, isError } = useGetSingleCustomerQuery(id,{
-    refetchOnMountOrArgChange:true
+  const {
+    data: customerData,
+    isLoading,
+    isError,
+  } = useGetSingleCustomerQuery(id, {
+    refetchOnMountOrArgChange: true,
   });
   const [updateCustomer] = useEditCustomerMutation();
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div>
+        <Shimmer />
+      </div>
+    );
   }
 
   if (isError) {
-    return <div>Error loading Customer data</div>;
+    return (
+      <div>
+        <ErrorInTheTable />
+      </div>
+    );
   }
 
   const initialValues: AddCustomerFormValues = {
     name: customerData?.customer.name || '',
-  address: customerData?.customer.address || '',
-  pincode: customerData?.customer.pincode || '',
-  mobile: customerData?.customer.mobile || '',
+    address: customerData?.customer.address || '',
+    pincode: customerData?.customer.pincode || '',
+    mobile: customerData?.customer.mobile || '',
     status: customerData?.customer.status || '',
   };
 
@@ -48,7 +62,7 @@ const EditCustomer: React.FC = () => {
   ) => {
     try {
       const response = await updateCustomer({
-        _id: id, 
+        _id: id,
         customer: values,
       }).unwrap();
       toast.success(response.message);
@@ -77,13 +91,16 @@ const EditCustomer: React.FC = () => {
         {({ isSubmitting }) => (
           <Form>
             <div className="w-[100%] mb-6 flex justify-between">
-              <div className='flex space-x-5 items-start justify-start'>
-                <ArrowLeftIcon onClick={() => navigate('/customers')} className='md:h-7 text-greyText hover:cursor-pointer'/>
+              <div className="flex space-x-5 items-start justify-start">
+                <ArrowLeftIcon
+                  onClick={() => navigate('/customers')}
+                  className="md:h-7 text-greyText hover:cursor-pointer"
+                />
                 <h1 className="font-shopify1000 font-bold text-greyText text-2xl">
                   Edit Customer
                 </h1>
               </div>
-              
+
               <div className="flex justify-end items-start space-x-4">
                 <button
                   type="button"
@@ -97,7 +114,7 @@ const EditCustomer: React.FC = () => {
                   disabled={isSubmitting}
                   className="font-shopify1000 text-AABlack bg-gradient-to-b from-fafawhite to-fafawhite border border-AABlack py-2 px-4 rounded-xl hover:scale-105 transition-all ease-in-out duration-300"
                 >
-                  {isSubmitting ? <ButtonLoading/> : 'Edit'}
+                  {isSubmitting ? <ButtonLoading /> : 'Edit'}
                 </button>
               </div>
             </div>
@@ -106,7 +123,9 @@ const EditCustomer: React.FC = () => {
             <div className="md:flex md:justify-center md:space-x-5">
               <div className="md:w-[70%] space-y-5">
                 <div className="md:shadow-custom border border-gray-400 bg-white pt-4 pb-6 px-6 md:rounded-xl">
-                  <h1 className="font-shopify1000 text-xl mb-2">Customer Info</h1>
+                  <h1 className="font-shopify1000 text-xl mb-2">
+                    Customer Info
+                  </h1>
                   <Field
                     name="name"
                     component={CustomTextField}
@@ -125,12 +144,9 @@ const EditCustomer: React.FC = () => {
                     label="Pin Code"
                     placeholder="Address Pin Code"
                   />
-
                 </div>
                 <div className="md:shadow-custom border border-gray-400 bg-white pt-4 pb-6 px-6 md:rounded-xl">
-                  <h1 className="font-shopify1000 text-xl mb-2">
-                    Contacts
-                  </h1>
+                  <h1 className="font-shopify1000 text-xl mb-2">Contacts</h1>
                   <div className="flex justify-between items-center space-x-4">
                     <Field
                       name="mobile"
@@ -151,7 +167,6 @@ const EditCustomer: React.FC = () => {
                     placeholder="Status"
                   />
                 </div>
-
               </div>
             </div>
           </Form>

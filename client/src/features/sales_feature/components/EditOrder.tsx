@@ -15,6 +15,9 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useEditOrderMutation, useGetCustomersQuery, useGetProductsQuery, useGetSingleOrderQuery } from '../api/sales-api';
 import { toast } from 'sonner';
 import { ButtonLoading } from '../../../components/ButtonLoading';
+import Shimmer from '../../../components/Shimmer';
+import ErrorInTheTable from '../../../components/ErrorInTheTable';
+
 
 const EditOrder: React.FC = () => {
   const navigate = useNavigate();
@@ -39,11 +42,15 @@ const EditOrder: React.FC = () => {
   const [updateOrder] = useEditOrderMutation();
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <div>
+      <Shimmer/>
+    </div>;
   }
 
   if (isError) {
-    return <div>Error loading Customer data</div>;
+    return <div>
+      <ErrorInTheTable/>
+    </div>;
   }
 
   const findCustomerName = (customerId: string) => {

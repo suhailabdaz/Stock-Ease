@@ -15,6 +15,9 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useEditProductMutation, useGetSingleProductQuery } from '../api/inventory-api';
 import { toast } from 'sonner';
 import { ButtonLoading } from '../../../components/ButtonLoading';
+import Shimmer from '../../../components/Shimmer';
+import ErrorInTheTable from '../../../components/ErrorInTheTable';
+
 
 const EditProduct: React.FC = () => {
   const navigate = useNavigate();
@@ -30,11 +33,15 @@ const EditProduct: React.FC = () => {
   const [updateProduct] = useEditProductMutation();
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <div>
+      <Shimmer/>
+    </div>;
   }
 
   if (isError) {
-    return <div>Error loading product data</div>;
+    return <div>
+      <ErrorInTheTable/>
+    </div>;
   }
 
   const initialValues: AddProductFormValues = {

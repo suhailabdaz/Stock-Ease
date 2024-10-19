@@ -31,7 +31,7 @@ const dispatch = useDispatch()
   ) => {
     try {
       const response = await verifyOtp(values).unwrap();
-      if (response.status == 200) {
+      if (response.status == 200 || 201) {
         onSwitchToSignup('login');
         toast.success(response.message);
          dispatch(removeEmail())

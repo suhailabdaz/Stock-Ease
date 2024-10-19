@@ -12,7 +12,7 @@ export const AddProductSchema = Yup.object({
     .min(4, 'Category must be at least 4 characters'),
   status: Yup.string()
     .required('Status is required'),
-    publishing: Yup.array()
+  publishing: Yup.array()
     .min(1, 'At least one Publishing Channel is required')
     .required('Publishing status is required'),
   stock: Yup.number()

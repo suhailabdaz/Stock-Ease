@@ -1,11 +1,18 @@
 import React, { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useGetCustomersQuery, useGetOrdersQuery, useGetProductsQuery } from '../api/sales-api';
+import {
+  useGetCustomersQuery,
+  useGetOrdersQuery,
+  useGetProductsQuery,
+} from '../api/sales-api';
 import { motion } from 'framer-motion';
 import { TextField, InputAdornment } from '@mui/material';
 import { MagnifyingGlassIcon, EyeIcon } from '@heroicons/react/24/outline';
 import debounce from 'lodash/debounce';
-import NoOrders from './NoOrder';
+import NoOrders from '../../../components/NoDataIntheTable';
+import Shimmer from '../../../components/Shimmer';
+import FeatureHeader from '../../../components/FeatureHeader';
+import ErrorInTheTable from '../../../components/ErrorInTheTable';
 
 const OrderList = () => {
   const navigate = useNavigate();
@@ -19,13 +26,15 @@ const OrderList = () => {
     refetchOnMountOrArgChange: true,
   });
 
-  const { data: productsData,isLoading:isProductsLoading } = useGetProductsQuery(undefined, {
-    refetchOnMountOrArgChange: true,
-  });
+  const { data: productsData, isLoading: isProductsLoading } =
+    useGetProductsQuery(undefined, {
+      refetchOnMountOrArgChange: true,
+    });
 
-  const { data: customersData,isLoading: isCustomersLoading  } = useGetCustomersQuery(undefined, {
-    refetchOnMountOrArgChange: true,
-  });
+  const { data: customersData, isLoading: isCustomersLoading } =
+    useGetCustomersQuery(undefined, {
+      refetchOnMountOrArgChange: true,
+    });
 
   const debouncedSearch = useCallback(
     debounce((term: React.SetStateAction<string>) => {
@@ -38,23 +47,25 @@ const OrderList = () => {
     debouncedSearch(event.target.value);
   };
 
-
-
-  if (isLoading || isError || isProductsLoading || isCustomersLoading) {
+  if (ordersData?.orders.length == 0) {
     return (
       <div>
-        <div className="w-[100%] mb-6 flex justify-between">
-          <h1 className="font-shopify1000 font-bold text-greyText text-2xl">
-            Orders{' '}
-          </h1>
-          <button
-            onClick={() => navigate('/orders/create-order')}
-            className="font-shopify1000 text-fafawhite bg-gradient-to-b from-buttonTop to-buttonBootom py-2 px-3 rounded-xl hover:scale-105 transition-all ease-in-out duration-300"
-          >
-            Create order
-          </button>
-        </div>
-        <NoOrders />
+        <FeatureHeader entity="order" feature="Orders" />
+        <NoOrders entity="Orders" />
+      </div>
+    );
+  } else if (isLoading || isCustomersLoading || isProductsLoading) {
+    return (
+      <div>
+        <FeatureHeader entity="order" feature="Orders" />
+        <Shimmer />
+      </div>
+    );
+  } else if (isError) {
+    return (
+      <div>
+        <FeatureHeader entity="order" feature="Orders" />
+        <ErrorInTheTable />
       </div>
     );
   }
@@ -64,28 +75,18 @@ const OrderList = () => {
   );
 
   const getCustomerName = (customerId: string) => {
-    const customer = customersData?.customers.find(c => c._id === customerId);
+    const customer = customersData?.customers.find((c) => c._id === customerId);
     return customer ? `${customer.name}` : 'Unknown';
   };
 
   const getProductTitle = (productId: string) => {
-    const product = productsData?.products.find(p => p._id === productId);
+    const product = productsData?.products.find((p) => p._id === productId);
     return product ? product.title : 'Unknown';
   };
 
   return (
     <div>
-      <div className="w-[100%] mb-6 flex justify-between">
-        <h1 className="font-shopify1000 font-bold text-greyText text-2xl">
-          Orders
-        </h1>
-        <button
-          onClick={() => navigate('/orders/create-order')}
-          className="font-shopify1000 text-fafawhite bg-gradient-to-b from-buttonTop to-buttonBootom py-2 px-3 rounded-xl hover:scale-105 transition-all ease-in-out duration-300"
-        >
-          Create order
-        </button>
-      </div>
+      <FeatureHeader entity="order" feature="Orders" />
       <motion.div
         key="add-order"
         initial={{ x: '1%', opacity: 0 }}
@@ -147,11 +148,11 @@ const OrderList = () => {
                       </div>
                     </td>
                     <td className="pt-3 pb-3 px-6 text-greyText ">
-                    {getCustomerName(order.customerid)}
+                      {getCustomerName(order.customerid)}
                     </td>
 
                     <td className="pt-3 pb-3 px-6 text-greyText ">
-                    {getProductTitle(order.productid)}
+                      {getProductTitle(order.productid)}
                     </td>
                     <td className="pt-3 pb-3 px-6 text-greyText ">
                       {order.paymentmethod}
